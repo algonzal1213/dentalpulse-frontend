@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DentalPulse — Stay Sharp. Stay Current.</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060810;--surface:#0d1117;--surface2:#131720;--border:#1e2535;
+  --text:#e8eaf2;--muted:#6b7499;--accent:#00d4ff;--accent2:#7c3aed;
+  --green:#00c896;--red:#ff6b6b;--gold:#f5c842;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:0.35;}
+.ambient{position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:400px;background:radial-gradient(ellipse,rgba(0,212,255,0.06) 0%,transparent 70%);pointer-events:none;z-index:0;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 3rem;background:rgba(6,8,16,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);animation:fadeDown 0.6s ease both;}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.25rem;letter-spacing:-0.02em;display:flex;align-items:center;gap:0.5rem;}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 2s ease infinite;}
+.logo span{color:var(--accent);}
+nav ul{list-style:none;display:flex;gap:2rem;align-items:center;}
+nav a{text-decoration:none;color:var(--muted);font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;transition:color 0.2s;}
+nav a:hover{color:var(--text);}
+.nav-cta{background:var(--accent) !important;color:var(--bg) !important;padding:0.5rem 1.2rem;font-weight:700 !important;transition:box-shadow 0.2s,transform 0.15s;}
+.nav-cta:hover{box-shadow:0 0 20px rgba(0,212,255,0.4);transform:translateY(-1px);}
+
+/* HERO */
+.hero{padding:10rem 3rem 5rem;position:relative;z-index:1;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);padding:0.35rem 0.9rem;font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;animation:fadeUp 0.7s 0.1s ease both;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.5s ease infinite;}
+h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.5rem,4vw,4rem);line-height:1.05;letter-spacing:-0.03em;margin-bottom:1.5rem;animation:fadeUp 0.7s 0.2s ease both;}
+h1 .hl{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-desc{font-size:1.05rem;line-height:1.8;color:var(--muted);margin-bottom:2rem;animation:fadeUp 0.7s 0.3s ease both;}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp 0.7s 0.4s ease both;}
+.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.85rem 1.8rem;font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.04em;text-decoration:none;cursor:pointer;border:none;transition:all 0.2s;}
+.btn-primary{background:var(--accent);color:var(--bg);}
+.btn-primary:hover{box-shadow:0 0 30px rgba(0,212,255,0.4);transform:translateY(-2px);}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);animation:fadeUp 0.7s 0.5s ease both;}
+.stat-box{background:var(--surface);padding:2rem;transition:background 0.2s;}
+.stat-box:hover{background:var(--surface2);}
+.stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:2.2rem;letter-spacing:-0.03em;line-height:1;background:linear-gradient(135deg,var(--text),var(--muted));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.3rem;}
+.stat-num.accent{background:linear-gradient(135deg,var(--accent),#0099cc);-webkit-background-clip:text;background-clip:text;}
+.stat-label{font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:500;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;}
+
+/* CATEGORIES */
+.categories{padding:3rem 3rem;position:relative;z-index:1;max-width:1200px;margin:0 auto;}
+.section-eyebrow{font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;}
+.cats-scroll{display:flex;gap:0.75rem;overflow-x:auto;padding-bottom:0.5rem;scrollbar-width:none;}
+.cats-scroll::-webkit-scrollbar{display:none;}
+.cat-chip{flex-shrink:0;padding:0.5rem 1.1rem;font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:0.04em;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted);transition:all 0.2s;white-space:nowrap;}
+.cat-chip:hover,.cat-chip.active{background:rgba(0,212,255,0.1);border-color:var(--accent);color:var(--accent);}
+
+/* MAIN GRID */
+.main-grid{padding:2rem 3rem 4rem;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:2rem;position:relative;z-index:1;}
+.articles-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;}
+.articles-header h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:-0.01em;}
+.refresh-btn{display:flex;align-items:center;gap:0.4rem;font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);background:none;cursor:pointer;padding:0.4rem 0.8rem;border:1px solid rgba(0,212,255,0.2);transition:all 0.2s;}
+.refresh-btn:hover{background:rgba(0,212,255,0.08);}
+.articles-list{display:flex;flex-direction:column;gap:1px;background:var(--border);}
+
+/* ARTICLE CARD */
+.article-card{background:var(--surface);padding:1.75rem;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;position:relative;overflow:hidden;}
+.article-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,212,255,0.03),transparent);opacity:0;transition:opacity 0.2s;}
+.article-card:hover{background:var(--surface2);border-left-color:var(--accent);}
+.article-card:hover::after{opacity:1;}
+.card-meta{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;flex-wrap:wrap;}
+.card-tag{font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:2px;}
+.tag-orthodontics{background:rgba(124,58,237,0.15);color:#a78bfa;}
+.tag-periodontics{background:rgba(0,200,150,0.15);color:#00c896;}
+.tag-endodontics{background:rgba(245,200,66,0.15);color:#f5c842;}
+.tag-oral_surgery{background:rgba(255,107,107,0.15);color:#ff6b6b;}
+.tag-restorative{background:rgba(0,212,255,0.15);color:var(--accent);}
+.tag-implantology{background:rgba(255,165,0,0.15);color:orange;}
+.tag-pediatric{background:rgba(255,182,193,0.2);color:#ffb6c1;}
+.tag-oral_medicine{background:rgba(147,197,253,0.15);color:#93c5fd;}
+.card-date{font-family:'Syne',sans-serif;font-size:0.7rem;color:var(--muted);}
+.card-journal{font-family:'Syne',sans-serif;font-size:0.68rem;color:var(--muted);margin-left:auto;font-style:italic;max-width:200px;text-align:right;}
+.article-card h3{font-family:'Syne',sans-serif;font-weight:700;font-size:0.98rem;line-height:1.4;letter-spacing:-0.01em;margin-bottom:0.65rem;color:var(--text);}
+.article-card .summary{font-size:0.88rem;line-height:1.7;color:var(--muted);margin-bottom:1rem;}
+.article-card .summary strong{color:var(--text);}
+.card-footer{display:flex;align-items:center;justify-content:space-between;}
+.read-more{font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:0.3rem;transition:gap 0.2s;background:none;border:none;cursor:pointer;}
+.read-more:hover{gap:0.6rem;}
+.impact-badge{font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:600;padding:0.2rem 0.6rem;border:1px solid;}
+.impact-high{border-color:rgba(0,200,150,0.4);color:var(--green);}
+.impact-moderate,.impact-med{border-color:rgba(245,200,66,0.4);color:var(--gold);}
+
+/* SKELETONS */
+.skeleton-card{background:var(--surface);padding:1.75rem;border-left:3px solid transparent;}
+.skel{background:linear-gradient(90deg,var(--surface2) 25%,var(--border) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:2px;margin-bottom:10px;}
+.skel-tag{height:18px;width:80px;}
+.skel-title{height:16px;width:90%;}
+.skel-title2{height:16px;width:70%;}
+.skel-line{height:12px;width:100%;}
+.skel-line2{height:12px;width:85%;}
+.skel-line3{height:12px;width:60%;}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:1.5rem;}
+.newsletter-box{background:linear-gradient(135deg,rgba(0,212,255,0.06),rgba(124,58,237,0.06));border:1px solid rgba(0,212,255,0.2);padding:1.75rem;position:relative;overflow:hidden;}
+.newsletter-box::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(0,212,255,0.12),transparent 70%);pointer-events:none;}
+.newsletter-box h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-0.02em;margin-bottom:0.5rem;}
+.newsletter-box p{font-size:0.83rem;line-height:1.6;color:var(--muted);margin-bottom:1.2rem;}
+.email-form{display:flex;flex-direction:column;gap:0.6rem;}
+.email-input{background:rgba(255,255,255,0.04);border:1px solid var(--border);padding:0.75rem 1rem;color:var(--text);font-family:'Lora',serif;font-size:0.85rem;outline:none;transition:border-color 0.2s;width:100%;}
+.email-input::placeholder{color:var(--muted);}
+.email-input:focus{border-color:rgba(0,212,255,0.5);}
+.subscribe-btn{background:var(--accent);color:var(--bg);padding:0.75rem;font-family:'Syne',sans-serif;font-weight:700;font-size:0.82rem;letter-spacing:0.06em;text-transform:uppercase;border:none;cursor:pointer;transition:all 0.2s;width:100%;}
+.subscribe-btn:hover{box-shadow:0 0 20px rgba(0,212,255,0.3);}
+.subscribe-note{font-family:'Syne',sans-serif;font-size:0.68rem;color:var(--muted);text-align:center;}
+.success-msg{display:none;text-align:center;padding:1rem;background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.3);}
+.success-msg p{font-family:'Syne',sans-serif;font-size:0.82rem;color:var(--green);font-weight:600;}
+.error-msg{display:none;text-align:center;padding:0.6rem;background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);margin-top:0.5rem;}
+.error-msg p{font-family:'Syne',sans-serif;font-size:0.78rem;color:var(--red);}
+
+.preview-box{background:var(--surface);border:1px solid var(--border);padding:1.5rem;}
+.preview-box h3{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:1rem;}
+.preview-date{font-family:'Syne',sans-serif;font-size:0.68rem;color:var(--muted);margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);}
+.preview-item{padding:0.75rem 0;border-bottom:1px solid var(--border);}
+.preview-item:last-child{border-bottom:none;padding-bottom:0;}
+.preview-tag-label{font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.3rem;}
+.preview-item p{font-size:0.8rem;line-height:1.5;color:var(--muted);}
+.preview-item strong{color:var(--text);}
+
+.trending-box{background:var(--surface);border:1px solid var(--border);padding:1.5rem;}
+.trending-box h3{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:1rem;}
+.trending-item{display:flex;align-items:flex-start;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all 0.15s;}
+.trending-item:last-child{border-bottom:none;padding-bottom:0;}
+.trending-item:hover .trending-title{color:var(--accent);}
+.trending-num{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--border);line-height:1;flex-shrink:0;width:24px;}
+.trending-title{font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:600;line-height:1.4;transition:color 0.2s;}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(6,8,16,0.92);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:2rem;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);max-width:680px;width:100%;max-height:85vh;overflow-y:auto;padding:2.5rem;position:relative;animation:fadeUp 0.3s ease both;}
+.modal-close{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;font-family:'Syne',sans-serif;transition:color 0.2s;}
+.modal-close:hover{color:var(--text);}
+.modal h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;line-height:1.3;letter-spacing:-0.02em;margin-bottom:0.75rem;}
+.modal-meta{display:flex;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);font-family:'Syne',sans-serif;font-size:0.75rem;color:var(--muted);flex-wrap:wrap;}
+.modal-section{margin-bottom:1.5rem;}
+.modal-section h4{font-family:'Syne',sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.6rem;}
+.modal-section p{font-size:0.9rem;line-height:1.75;color:var(--muted);}
+.modal-section p strong{color:var(--text);}
+.modal-section ul{padding-left:1.2rem;}
+.modal-section li{font-size:0.88rem;line-height:1.7;color:var(--muted);margin-bottom:0.3rem;}
+.modal-footer{padding-top:1.5rem;border-top:1px solid var(--border);display:flex;gap:1rem;flex-wrap:wrap;}
+.doi-btn{display:inline-flex;align-items:center;gap:0.4rem;font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:0.6rem 1.2rem;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);color:var(--accent);cursor:pointer;transition:all 0.2s;}
+.doi-btn:hover{background:rgba(0,212,255,0.2);}
+
+/* EMPTY / ERROR STATES */
+.empty-state{padding:3rem;text-align:center;font-family:'Syne',sans-serif;font-size:0.9rem;color:var(--muted);background:var(--surface);}
+.empty-state .empty-icon{font-size:2rem;margin-bottom:1rem;}
+.empty-state p{line-height:1.7;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1;max-width:1200px;margin:0 auto;}
+footer p{font-family:'Syne',sans-serif;font-size:0.75rem;color:var(--muted);}
+.footer-links{display:flex;gap:1.5rem;}
+.footer-links a{font-family:'Syne',sans-serif;font-size:0.75rem;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--accent);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;padding:8rem 1.5rem 3rem;}
+  .main-grid{grid-template-columns:1fr;padding:1rem 1.5rem 3rem;}
+  nav{padding:1rem 1.5rem;}
+  nav ul{display:none;}
+  .categories{padding:2rem 1.5rem;}
+  .hero-stats{margin-top:1rem;}
+  footer{flex-direction:column;gap:1rem;text-align:center;padding:2rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+<div class="ambient"></div>
+
+<nav>
+  <div class="logo"><div class="logo-dot"></div>Dental<span>Pulse</span></div>
+  <ul>
+    <li><a href="#articles">Research</a></li>
+    <li><a href="#newsletter">Newsletter</a></li>
+    <li><a href="#newsletter" class="nav-cta">Subscribe Free</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge"><span class="live-dot"></span> AI-Summarized Daily</div>
+    <h1>Every Dental<br>Breakthrough,<br><span class="hl">Simplified.</span></h1>
+    <p class="hero-desc">DentalPulse scans hundreds of peer-reviewed journals daily — from JADA to IJOM — and distills cutting-edge research into clear, actionable summaries built for busy clinicians.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="document.getElementById('articles').scrollIntoView({behavior:'smooth'})">Read Today's Research ↓</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('newsletter').scrollIntoView({behavior:'smooth'})">Get the Newsletter</button>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-box"><div class="stat-num accent" id="c1">147</div><div class="stat-label">Journals Monitored</div></div>
+    <div class="stat-box"><div class="stat-num" id="c2">—</div><div class="stat-label">Articles Summarized</div></div>
+    <div class="stat-box"><div class="stat-num accent" id="c3">—</div><div class="stat-label">Subscribers</div></div>
+    <div class="stat-box"><div class="stat-num">8</div><div class="stat-label">Specialty Areas</div></div>
+  </div>
+</section>
+
+<section class="categories">
+  <p class="section-eyebrow">Browse by Specialty</p>
+  <div class="cats-scroll">
+    <div class="cat-chip active" onclick="filterCat('all',this)">All Specialties</div>
+    <div class="cat-chip" onclick="filterCat('orthodontics',this)">Orthodontics</div>
+    <div class="cat-chip" onclick="filterCat('periodontics',this)">Periodontics</div>
+    <div class="cat-chip" onclick="filterCat('endodontics',this)">Endodontics</div>
+    <div class="cat-chip" onclick="filterCat('oral_surgery',this)">Oral Surgery</div>
+    <div class="cat-chip" onclick="filterCat('restorative',this)">Restorative</div>
+    <div class="cat-chip" onclick="filterCat('implantology',this)">Implantology</div>
+    <div class="cat-chip" onclick="filterCat('pediatric',this)">Pediatric</div>
+    <div class="cat-chip" onclick="filterCat('oral_medicine',this)">Oral Medicine</div>
+  </div>
+</section>
+
+<div class="main-grid" id="articles">
+  <div>
+    <div class="articles-header">
+      <h2>Latest Research — <span id="today-date"></span></h2>
+      <button class="refresh-btn" onclick="loadArticles()">⟳ Refresh</button>
+    </div>
+    <div class="articles-list" id="articles-list"></div>
+  </div>
+
+  <div class="sidebar" id="newsletter">
+    <div class="newsletter-box">
+      <p class="section-eyebrow" style="margin-bottom:0.75rem">Daily Digest</p>
+      <h3>Never Miss a Breakthrough</h3>
+      <p>Get AI-summarized dental research delivered every morning before rounds. Curated by specialty, clinically relevant, always free.</p>
+      <div class="email-form" id="email-form">
+        <input type="text" class="email-input" id="name-input" placeholder="Your name"/>
+        <input type="email" class="email-input" id="email-input" placeholder="your@email.com"/>
+        <select class="email-input" id="spec-select" style="cursor:pointer;font-family:'Lora',serif;">
+          <option value="all">All Specialties</option>
+          <option value="orthodontics">Orthodontics</option>
+          <option value="periodontics">Periodontics</option>
+          <option value="endodontics">Endodontics</option>
+          <option value="oral_surgery">Oral Surgery</option>
+          <option value="restorative">Restorative Dentistry</option>
+          <option value="implantology">Implantology</option>
+          <option value="pediatric">Pediatric Dentistry</option>
+          <option value="oral_medicine">Oral Medicine</option>
+        </select>
+        <button class="subscribe-btn" id="subscribe-btn" onclick="handleSub()">Subscribe — It's Free →</button>
+        <p class="subscribe-note">No spam. Unsubscribe anytime.</p>
+      </div>
+      <div class="success-msg" id="success-msg"><p>✓ You're on the list! First digest arrives tomorrow morning.</p></div>
+      <div class="error-msg" id="error-msg"><p id="error-text">Something went wrong. Please try again.</p></div>
+    </div>
+
+    <div class="preview-box">
+      <h3>📋 Today's Digest Preview</h3>
+      <div class="preview-date" id="preview-date"></div>
+      <div id="preview-items"><div style="font-family:'Syne',sans-serif;font-size:0.78rem;color:var(--muted);">Loading preview...</div></div>
+    </div>
+
+    <div class="trending-box">
+      <h3>🔥 Trending This Week</h3>
+      <div id="trending-list"><div style="font-family:'Syne',sans-serif;font-size:0.78rem;color:var(--muted);">Loading...</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="maybeClose(event)">
+  <div class="modal"><button class="modal-close" onclick="closeModal()">✕</button><div id="modal-body"></div></div>
+</div>
+
+<footer>
+  <p>© 2026 DentalPulse · AI-powered research digest for dental professionals</p>
+  <div class="footer-links"><a href="#">Privacy</a><a href="#">Unsubscribe</a><a href="#">About</a><a href="#">Contact</a></div>
+</footer>
+
+<script>
+// ── CONFIG ─────────────────────────────────────────────────────────────────
+// UPDATE THIS LINE after deploying to Render:
+const API = 'https://dentalpulse-backend.onrender.com';
+
+const SPECIALTY_LABELS = {
+  orthodontics:'Orthodontics', periodontics:'Periodontics', endodontics:'Endodontics',
+  oral_surgery:'Oral Surgery', restorative:'Restorative', implantology:'Implantology',
+  pediatric:'Pediatric', oral_medicine:'Oral Medicine'
+};
+
+let currentCat = 'all';
+let allLoaded  = [];
+
+// ── SKELETONS ───────────────────────────────────────────────────────────────
+function showSkeletons() {
+  document.getElementById('articles-list').innerHTML = [1,2,3].map(()=>`
+    <div class="skeleton-card">
+      <div class="skel skel-tag"></div>
+      <div class="skel skel-title"></div>
+      <div class="skel skel-title2"></div>
+      <div class="skel skel-line"></div>
+      <div class="skel skel-line2"></div>
+      <div class="skel skel-line3"></div>
+    </div>
+  `).join('<div style="height:1px;background:var(--border)"></div>');
+}
+
+// ── FETCH ARTICLES FROM BACKEND ─────────────────────────────────────────────
+async function loadArticles() {
+  showSkeletons();
+  try {
+    const url = currentCat === 'all'
+      ? `${API}/api/articles?limit=20`
+      : `${API}/api/articles?specialty=${currentCat}&limit=20`;
+    const res      = await fetch(url);
+    const articles = await res.json();
+    allLoaded = articles;
+    renderArticles(articles);
+    if (articles.length) renderPreview(articles);
+    if (articles.length) renderTrending(articles);
+  } catch(e) {
+    document.getElementById('articles-list').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔌</div>
+        <p>Could not connect to the backend.<br/>Make sure the server is running at:<br/><strong style="color:var(--accent)">${API}</strong></p>
+      </div>`;
+  }
+}
+
+// ── FETCH LIVE STATS ────────────────────────────────────────────────────────
+async function loadStats() {
+  try {
+    const res  = await fetch(`${API}/api/stats`);
+    const data = await res.json();
+    animateCounter('c2', data.articles_total  || 0);
+    animateCounter('c3', data.subscribers     || 0);
+  } catch(e) {}
+}
+
+function animateCounter(id, target, dur=1200) {
+  const el = document.getElementById(id); if(!el) return;
+  let v=0; const step = target/(dur/16);
+  const t = setInterval(()=>{
+    v = Math.min(v+step, target);
+    el.textContent = Math.floor(v).toLocaleString();
+    if(v>=target) clearInterval(t);
+  }, 16);
+}
+
+// ── RENDER ARTICLES ─────────────────────────────────────────────────────────
+function renderArticles(list) {
+  const el = document.getElementById('articles-list');
+  if (!list.length) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><p>No articles found for this specialty yet.<br/>Run the pipeline to fetch some!</p></div>`;
+    return;
+  }
+  el.innerHTML = list.map((a,i) => {
+    const label   = SPECIALTY_LABELS[a.specialty] || a.specialty || '';
+    const tagClass= `tag-${a.specialty}`;
+    const date    = a.pub_date ? new Date(a.pub_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+    return `
+      <div class="article-card" onclick="openModal('${a.id}')" style="animation:fadeUp 0.5s ${i*0.07}s ease both">
+        <div class="card-meta">
+          <span class="card-tag ${tagClass}">${label}</span>
+          <span class="card-date">${date}</span>
+          <span class="card-journal">${(a.journal||'').slice(0,35)}</span>
+        </div>
+        <h3>${a.title}</h3>
+        <p class="summary">${a.ai_summary || ''}</p>
+        <div class="card-footer">
+          <button class="read-more">Read full summary →</button>
+          <span class="impact-badge impact-${a.impact_level||'moderate'}">${a.impact_level==='high'?'⬆ High Impact':'~ Moderate Impact'}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── FILTER ──────────────────────────────────────────────────────────────────
+function filterCat(cat, el) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  loadArticles();
+}
+
+// ── MODAL ────────────────────────────────────────────────────────────────────
+async function openModal(id) {
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('modal-body').innerHTML = `<div style="padding:2rem;text-align:center;color:var(--muted);font-family:'Syne',sans-serif;">Loading...</div>`;
+
+  try {
+    const res = await fetch(`${API}/api/articles/${id}`);
+    const a   = await res.json();
+    const label   = SPECIALTY_LABELS[a.specialty] || a.specialty || '';
+    const tagClass= `tag-${a.specialty}`;
+    const date    = a.pub_date ? new Date(a.pub_date).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '';
+    const findings= (a.ai_findings||[]).map(f=>`<li><strong>→</strong> ${f}</li>`).join('');
+
+    document.getElementById('modal-body').innerHTML = `
+      <div style="margin-bottom:0.75rem"><span class="card-tag ${tagClass}">${label}</span></div>
+      <h2>${a.title}</h2>
+      <div class="modal-meta">
+        <span>📰 ${a.journal||''}</span>
+        <span>👤 ${a.authors||''}</span>
+        ${date?`<span>📅 ${date}</span>`:''}
+        ${a.doi?`<span>DOI: ${a.doi}</span>`:''}
+        <span class="impact-badge impact-${a.impact_level||'moderate'}">${a.impact_level==='high'?'⬆ High Impact':'~ Moderate Impact'}</span>
+      </div>
+      <div class="modal-section"><h4>AI Summary</h4><p>${a.ai_summary||''}</p></div>
+      ${findings?`<div class="modal-section"><h4>Key Findings</h4><ul>${findings}</ul></div>`:''}
+      ${a.ai_implication?`<div class="modal-section"><h4>Clinical Implication</h4><p>${a.ai_implication}</p></div>`:''}
+      <div class="modal-footer">
+        ${a.doi?`<button class="doi-btn" onclick="window.open('https://doi.org/${a.doi}','_blank')">🔗 View Original Article</button>`:''}
+        <button class="doi-btn" onclick="closeModal()">← Back to Feed</button>
+      </div>
+    `;
+  } catch(e) {
+    document.getElementById('modal-body').innerHTML = `<p style="color:var(--muted);font-family:'Syne',sans-serif;">Could not load article details.</p>`;
+  }
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function maybeClose(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+// ── SUBSCRIBE ────────────────────────────────────────────────────────────────
+async function handleSub() {
+  const name      = document.getElementById('name-input').value.trim();
+  const email     = document.getElementById('email-input').value.trim();
+  const specialty = document.getElementById('spec-select').value;
+  const btn       = document.getElementById('subscribe-btn');
+  const errEl     = document.getElementById('error-msg');
+
+  if (!email || !email.includes('@')) {
+    document.getElementById('email-input').style.borderColor = 'var(--red)';
+    setTimeout(()=>{ document.getElementById('email-input').style.borderColor='var(--border)'; }, 2000);
+    return;
+  }
+
+  btn.textContent = 'Subscribing...';
+  btn.disabled    = true;
+  errEl.style.display = 'none';
+
+  try {
+    const res  = await fetch(`${API}/api/subscribe`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ name, email, specialty })
+    });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || 'Subscribe failed');
+
+    document.getElementById('email-form').style.display  = 'none';
+    document.getElementById('success-msg').style.display = 'block';
+    loadStats(); // refresh subscriber count
+  } catch(e) {
+    btn.textContent = 'Subscribe — It\'s Free →';
+    btn.disabled    = false;
+    document.getElementById('error-text').textContent = e.message;
+    errEl.style.display = 'block';
+  }
+}
+
+// ── PREVIEW ──────────────────────────────────────────────────────────────────
+function renderPreview(articles) {
+  const d = new Date();
+  document.getElementById('preview-date').textContent =
+    d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}) +
+    ` · ${articles.length} articles`;
+
+  document.getElementById('preview-items').innerHTML = articles.slice(0,3).map(a => {
+    const label = SPECIALTY_LABELS[a.specialty] || a.specialty;
+    const plain = (a.ai_summary||'').replace(/<[^>]+>/g,'');
+    return `
+      <div class="preview-item">
+        <div class="preview-tag-label">${label}</div>
+        <p><strong>${a.title.split(':')[0]}</strong> — ${plain.substring(0,90)}...</p>
+      </div>`;
+  }).join('');
+}
+
+// ── TRENDING ─────────────────────────────────────────────────────────────────
+function renderTrending(articles) {
+  const high = articles.filter(a=>a.impact_level==='high').slice(0,5);
+  const list = high.length ? high : articles.slice(0,5);
+  document.getElementById('trending-list').innerHTML = list.map((a,i)=>`
+    <div class="trending-item" onclick="openModal('${a.id}')">
+      <div class="trending-num">0${i+1}</div>
+      <div class="trending-title">${a.title.split(':')[0]}</div>
+    </div>
+  `).join('');
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('today-date').textContent =
+    new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  loadArticles();
+  loadStats();
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+});
+</script>
+</body>
+</html>
