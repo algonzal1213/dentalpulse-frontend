@@ -1,519 +1,1175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>DentalPulse — Stay Sharp. Stay Current.</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#060810;--surface:#0d1117;--surface2:#131720;--border:#1e2535;
-  --text:#e8eaf2;--muted:#6b7499;--accent:#00d4ff;--accent2:#7c3aed;
-  --green:#00c896;--red:#ff6b6b;--gold:#f5c842;
-}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min-height:100vh;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:0.35;}
-.ambient{position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:400px;background:radial-gradient(ellipse,rgba(0,212,255,0.06) 0%,transparent 70%);pointer-events:none;z-index:0;}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DentalPulse — Stay Sharp. Stay Current.</title>
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 3rem;background:rgba(6,8,16,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);animation:fadeDown 0.6s ease both;}
-.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.25rem;letter-spacing:-0.02em;display:flex;align-items:center;gap:0.5rem;}
-.logo-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 2s ease infinite;}
-.logo span{color:var(--accent);}
-nav ul{list-style:none;display:flex;gap:2rem;align-items:center;}
-nav a{text-decoration:none;color:var(--muted);font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;transition:color 0.2s;}
-nav a:hover{color:var(--text);}
-.nav-cta{background:var(--accent) !important;color:var(--bg) !important;padding:0.5rem 1.2rem;font-weight:700 !important;transition:box-shadow 0.2s,transform 0.15s;}
-.nav-cta:hover{box-shadow:0 0 20px rgba(0,212,255,0.4);transform:translateY(-1px);}
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&display=swap" rel="stylesheet" />
 
-/* HERO */
-.hero{padding:10rem 3rem 5rem;position:relative;z-index:1;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
-.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);padding:0.35rem 0.9rem;font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;animation:fadeUp 0.7s 0.1s ease both;}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.5s ease infinite;}
-h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.5rem,4vw,4rem);line-height:1.05;letter-spacing:-0.03em;margin-bottom:1.5rem;animation:fadeUp 0.7s 0.2s ease both;}
-h1 .hl{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero-desc{font-size:1.05rem;line-height:1.8;color:var(--muted);margin-bottom:2rem;animation:fadeUp 0.7s 0.3s ease both;}
-.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp 0.7s 0.4s ease both;}
-.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.85rem 1.8rem;font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.04em;text-decoration:none;cursor:pointer;border:none;transition:all 0.2s;}
-.btn-primary{background:var(--accent);color:var(--bg);}
-.btn-primary:hover{box-shadow:0 0 30px rgba(0,212,255,0.4);transform:translateY(-2px);}
-.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);}
-.btn-ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
-.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);animation:fadeUp 0.7s 0.5s ease both;}
-.stat-box{background:var(--surface);padding:2rem;transition:background 0.2s;}
-.stat-box:hover{background:var(--surface2);}
-.stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:2.2rem;letter-spacing:-0.03em;line-height:1;background:linear-gradient(135deg,var(--text),var(--muted));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.3rem;}
-.stat-num.accent{background:linear-gradient(135deg,var(--accent),#0099cc);-webkit-background-clip:text;background-clip:text;}
-.stat-label{font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:500;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;}
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-/* CATEGORIES */
-.categories{padding:3rem 3rem;position:relative;z-index:1;max-width:1200px;margin:0 auto;}
-.section-eyebrow{font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;}
-.cats-scroll{display:flex;gap:0.75rem;overflow-x:auto;padding-bottom:0.5rem;scrollbar-width:none;}
-.cats-scroll::-webkit-scrollbar{display:none;}
-.cat-chip{flex-shrink:0;padding:0.5rem 1.1rem;font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:0.04em;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted);transition:all 0.2s;white-space:nowrap;}
-.cat-chip:hover,.cat-chip.active{background:rgba(0,212,255,0.1);border-color:var(--accent);color:var(--accent);}
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'brand-navy':   '#0A1628',
+            'brand-white':  '#FFFFFF',
+            'brand-teal':   '#00B4D8',
+            'brand-orange': '#FA4E03',
+            'brand-cream':  '#F8F9FA',
+            'brand-black':  '#141414',
+            'brand-pink':   '#FB8D9D',
+            'brand-yellow': '#FABC3C',
+            'brand-green':  '#42B446',
+          },
+          fontFamily: {
+            body:    ['"Geist"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            heading: ['"Bricolage Grotesque"', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
 
-/* MAIN GRID */
-.main-grid{padding:2rem 3rem 4rem;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:2rem;position:relative;z-index:1;}
-.articles-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;}
-.articles-header h2{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:-0.01em;}
-.refresh-btn{display:flex;align-items:center;gap:0.4rem;font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--accent);background:none;cursor:pointer;padding:0.4rem 0.8rem;border:1px solid rgba(0,212,255,0.2);transition:all 0.2s;}
-.refresh-btn:hover{background:rgba(0,212,255,0.08);}
-.articles-list{display:flex;flex-direction:column;gap:1px;background:var(--border);}
+  <style>
+    :root {
+      --color-navy:   #0A1628;
+      --color-white:  #FFFFFF;
+      --color-teal:   #00B4D8;
+      --color-orange: #FA4E03;
+      --color-cream:  #F8F9FA;
+      --color-black:  #141414;
+      --color-pink:   #FB8D9D;
+      --color-yellow: #FABC3C;
+      --color-green:  #42B446;
+      --font-family-body:    "Geist", sans-serif;
+      --font-family-heading: "Bricolage Grotesque", sans-serif;
+    }
 
-/* ARTICLE CARD */
-.article-card{background:var(--surface);padding:1.75rem;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;position:relative;overflow:hidden;}
-.article-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,212,255,0.03),transparent);opacity:0;transition:opacity 0.2s;}
-.article-card:hover{background:var(--surface2);border-left-color:var(--accent);}
-.article-card:hover::after{opacity:1;}
-.card-meta{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;flex-wrap:wrap;}
-.card-tag{font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:2px;}
-.tag-orthodontics{background:rgba(124,58,237,0.15);color:#a78bfa;}
-.tag-periodontics{background:rgba(0,200,150,0.15);color:#00c896;}
-.tag-endodontics{background:rgba(245,200,66,0.15);color:#f5c842;}
-.tag-oral_surgery{background:rgba(255,107,107,0.15);color:#ff6b6b;}
-.tag-restorative{background:rgba(0,212,255,0.15);color:var(--accent);}
-.tag-implantology{background:rgba(255,165,0,0.15);color:orange;}
-.tag-pediatric{background:rgba(255,182,193,0.2);color:#ffb6c1;}
-.tag-oral_medicine{background:rgba(147,197,253,0.15);color:#93c5fd;}
-.card-date{font-family:'Syne',sans-serif;font-size:0.7rem;color:var(--muted);}
-.card-journal{font-family:'Syne',sans-serif;font-size:0.68rem;color:var(--muted);margin-left:auto;font-style:italic;max-width:200px;text-align:right;}
-.article-card h3{font-family:'Syne',sans-serif;font-weight:700;font-size:0.98rem;line-height:1.4;letter-spacing:-0.01em;margin-bottom:0.65rem;color:var(--text);}
-.article-card .summary{font-size:0.88rem;line-height:1.7;color:var(--muted);margin-bottom:1rem;}
-.article-card .summary strong{color:var(--text);}
-.card-footer{display:flex;align-items:center;justify-content:space-between;}
-.read-more{font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:0.3rem;transition:gap 0.2s;background:none;border:none;cursor:pointer;}
-.read-more:hover{gap:0.6rem;}
-.impact-badge{font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:600;padding:0.2rem 0.6rem;border:1px solid;}
-.impact-high{border-color:rgba(0,200,150,0.4);color:var(--green);}
-.impact-moderate,.impact-med{border-color:rgba(245,200,66,0.4);color:var(--gold);}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
-/* SKELETONS */
-.skeleton-card{background:var(--surface);padding:1.75rem;border-left:3px solid transparent;}
-.skel{background:linear-gradient(90deg,var(--surface2) 25%,var(--border) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:2px;margin-bottom:10px;}
-.skel-tag{height:18px;width:80px;}
-.skel-title{height:16px;width:90%;}
-.skel-title2{height:16px;width:70%;}
-.skel-line{height:12px;width:100%;}
-.skel-line2{height:12px;width:85%;}
-.skel-line3{height:12px;width:60%;}
+    body {
+      background-color: var(--color-white);
+      color: var(--color-black);
+      font-family: var(--font-family-body);
+      -webkit-font-smoothing: antialiased;
+    }
 
-/* SIDEBAR */
-.sidebar{display:flex;flex-direction:column;gap:1.5rem;}
-.newsletter-box{background:linear-gradient(135deg,rgba(0,212,255,0.06),rgba(124,58,237,0.06));border:1px solid rgba(0,212,255,0.2);padding:1.75rem;position:relative;overflow:hidden;}
-.newsletter-box::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(0,212,255,0.12),transparent 70%);pointer-events:none;}
-.newsletter-box h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:-0.02em;margin-bottom:0.5rem;}
-.newsletter-box p{font-size:0.83rem;line-height:1.6;color:var(--muted);margin-bottom:1.2rem;}
-.email-form{display:flex;flex-direction:column;gap:0.6rem;}
-.email-input{background:rgba(255,255,255,0.04);border:1px solid var(--border);padding:0.75rem 1rem;color:var(--text);font-family:'Lora',serif;font-size:0.85rem;outline:none;transition:border-color 0.2s;width:100%;}
-.email-input::placeholder{color:var(--muted);}
-.email-input:focus{border-color:rgba(0,212,255,0.5);}
-.subscribe-btn{background:var(--accent);color:var(--bg);padding:0.75rem;font-family:'Syne',sans-serif;font-weight:700;font-size:0.82rem;letter-spacing:0.06em;text-transform:uppercase;border:none;cursor:pointer;transition:all 0.2s;width:100%;}
-.subscribe-btn:hover{box-shadow:0 0 20px rgba(0,212,255,0.3);}
-.subscribe-note{font-family:'Syne',sans-serif;font-size:0.68rem;color:var(--muted);text-align:center;}
-.success-msg{display:none;text-align:center;padding:1rem;background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.3);}
-.success-msg p{font-family:'Syne',sans-serif;font-size:0.82rem;color:var(--green);font-weight:600;}
-.error-msg{display:none;text-align:center;padding:0.6rem;background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);margin-top:0.5rem;}
-.error-msg p{font-family:'Syne',sans-serif;font-size:0.78rem;color:var(--red);}
+    h1, h2, h3, h4, h5 { font-family: var(--font-family-heading); }
 
-.preview-box{background:var(--surface);border:1px solid var(--border);padding:1.5rem;}
-.preview-box h3{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:1rem;}
-.preview-date{font-family:'Syne',sans-serif;font-size:0.68rem;color:var(--muted);margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);}
-.preview-item{padding:0.75rem 0;border-bottom:1px solid var(--border);}
-.preview-item:last-child{border-bottom:none;padding-bottom:0;}
-.preview-tag-label{font-family:'Syne',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.3rem;}
-.preview-item p{font-size:0.8rem;line-height:1.5;color:var(--muted);}
-.preview-item strong{color:var(--text);}
+    /* ── Nav ── */
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.70);
+      letter-spacing: 0.01em;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: #fff; }
 
-.trending-box{background:var(--surface);border:1px solid var(--border);padding:1.5rem;}
-.trending-box h3{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:1rem;}
-.trending-item{display:flex;align-items:flex-start;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all 0.15s;}
-.trending-item:last-child{border-bottom:none;padding-bottom:0;}
-.trending-item:hover .trending-title{color:var(--accent);}
-.trending-num{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--border);line-height:1;flex-shrink:0;width:24px;}
-.trending-title{font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:600;line-height:1.4;transition:color 0.2s;}
+    /* ── Subheading style ── */
+    .section-sub {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #3a3a3a;
+      line-height: 1.65;
+    }
 
-/* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(6,8,16,0.92);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:2rem;}
-.modal-overlay.open{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border);max-width:680px;width:100%;max-height:85vh;overflow-y:auto;padding:2.5rem;position:relative;animation:fadeUp 0.3s ease both;}
-.modal-close{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;font-family:'Syne',sans-serif;transition:color 0.2s;}
-.modal-close:hover{color:var(--text);}
-.modal h2{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;line-height:1.3;letter-spacing:-0.02em;margin-bottom:0.75rem;}
-.modal-meta{display:flex;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);font-family:'Syne',sans-serif;font-size:0.75rem;color:var(--muted);flex-wrap:wrap;}
-.modal-section{margin-bottom:1.5rem;}
-.modal-section h4{font-family:'Syne',sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.6rem;}
-.modal-section p{font-size:0.9rem;line-height:1.75;color:var(--muted);}
-.modal-section p strong{color:var(--text);}
-.modal-section ul{padding-left:1.2rem;}
-.modal-section li{font-size:0.88rem;line-height:1.7;color:var(--muted);margin-bottom:0.3rem;}
-.modal-footer{padding-top:1.5rem;border-top:1px solid var(--border);display:flex;gap:1rem;flex-wrap:wrap;}
-.doi-btn{display:inline-flex;align-items:center;gap:0.4rem;font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:0.6rem 1.2rem;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);color:var(--accent);cursor:pointer;transition:all 0.2s;}
-.doi-btn:hover{background:rgba(0,212,255,0.2);}
+    /* ── Research section ── */
+    .cat-chip {
+      display: inline-flex; align-items: center;
+      padding: 0.35rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 600;
+      border: 1.5px solid #e2e8f0;
+      background: #fff; color: #4a5568;
+      cursor: pointer; transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .cat-chip:hover, .cat-chip.active {
+      background: var(--color-navy); color: #fff; border-color: var(--color-navy);
+    }
+    .article-card-row {
+      background: #fff;
+      border-left: 3px solid transparent;
+      padding: 1.5rem 1.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .article-card-row + .article-card-row { border-top: 1px solid #f1f5f9; }
+    .article-card-row:hover {
+      background: #f8faff;
+      border-left-color: var(--color-teal);
+    }
+    .article-card-row .a-meta {
+      display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.6rem; flex-wrap: wrap;
+    }
+    .a-tag {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 3px;
+    }
+    .a-tag-orthodontics  { background: rgba(124,58,237,0.1); color: #7c3aed; }
+    .a-tag-periodontics  { background: rgba(0,180,150,0.1);  color: #00b496; }
+    .a-tag-endodontics   { background: rgba(245,200,66,0.15); color: #b8860b; }
+    .a-tag-oral_surgery  { background: rgba(255,107,107,0.12);color: #e53e3e; }
+    .a-tag-restorative   { background: rgba(0,180,216,0.12);  color: #0284c7; }
+    .a-tag-implantology  { background: rgba(250,78,3,0.1);    color: #c05621; }
+    .a-tag-pediatric     { background: rgba(236,72,153,0.1);  color: #be185d; }
+    .a-tag-oral_medicine { background: rgba(99,102,241,0.1);  color: #4338ca; }
+    .a-date { font-size: 0.7rem; color: #9ca3af; }
+    .a-journal { font-size: 0.68rem; color: #9ca3af; font-style: italic; margin-left: auto; }
+    .article-card-row h3 {
+      font-family: var(--font-family-heading); font-weight: 700;
+      font-size: 0.97rem; line-height: 1.4; color: var(--color-navy); margin-bottom: 0.5rem;
+    }
+    .article-card-row .a-summary {
+      font-size: 0.85rem; line-height: 1.7; color: #64748b;
+      display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .a-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 0.75rem; }
+    .impact-badge {
+      font-size: 0.62rem; font-weight: 600; padding: 0.2rem 0.55rem;
+      border-radius: 3px; border: 1px solid;
+    }
+    .impact-high     { border-color: rgba(0,180,150,0.35); color: #00b496; background: rgba(0,180,150,0.07); }
+    .impact-moderate { border-color: rgba(245,200,66,0.4);  color: #b8860b; background: rgba(245,200,66,0.08); }
+    .a-read-more { font-size: 0.75rem; color: var(--color-teal); font-weight: 600; }
+    /* Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(10,22,40,0.85); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 2rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #fff; max-width: 680px; width: 100%;
+      max-height: 85vh; overflow-y: auto; border-radius: 16px;
+      padding: 2.5rem; position: relative;
+    }
+    .modal-box h2 { font-family: var(--font-family-heading); font-weight: 800; font-size: 1.35rem; line-height: 1.3; color: var(--color-navy); margin-bottom: 0.75rem; }
+    .modal-meta { font-size: 0.78rem; color: #9ca3af; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid #f1f5f9; display: flex; gap: 1rem; flex-wrap: wrap; }
+    .modal-section { margin-bottom: 1.5rem; }
+    .modal-section h4 { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-teal); margin-bottom: 0.6rem; }
+    .modal-section p { font-size: 0.9rem; line-height: 1.75; color: #4a5568; }
+    .modal-section ul { padding-left: 1.2rem; }
+    .modal-section li { font-size: 0.88rem; line-height: 1.7; color: #4a5568; margin-bottom: 0.3rem; }
+    .modal-close { position: absolute; top: 1.25rem; right: 1.25rem; background: none; border: none; font-size: 1.3rem; color: #9ca3af; cursor: pointer; transition: color .2s; }
+    .modal-close:hover { color: var(--color-navy); }
+    .skeleton-row { padding: 1.5rem 1.75rem; border-top: 1px solid #f1f5f9; }
+    .skel { background: #f1f5f9; border-radius: 4px; animation: shimmer 1.4s ease infinite; }
+    @keyframes shimmer { 0%,100%{opacity:.6} 50%{opacity:1} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 
-/* EMPTY / ERROR STATES */
-.empty-state{padding:3rem;text-align:center;font-family:'Syne',sans-serif;font-size:0.9rem;color:var(--muted);background:var(--surface);}
-.empty-state .empty-icon{font-size:2rem;margin-bottom:1rem;}
-.empty-state p{line-height:1.7;}
+    /* ── Stat number ── */
+    .stat-num {
+      font-family: var(--font-family-heading);
+      font-weight: 800;
+      line-height: 1;
+      color: #fff;
+    }
 
-/* FOOTER */
-footer{border-top:1px solid var(--border);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1;max-width:1200px;margin:0 auto;}
-footer p{font-family:'Syne',sans-serif;font-size:0.75rem;color:var(--muted);}
-.footer-links{display:flex;gap:1.5rem;}
-.footer-links a{font-family:'Syne',sans-serif;font-size:0.75rem;color:var(--muted);text-decoration:none;transition:color 0.2s;}
-.footer-links a:hover{color:var(--accent);}
-
-/* ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
-@media(max-width:900px){
-  .hero{grid-template-columns:1fr;padding:8rem 1.5rem 3rem;}
-  .main-grid{grid-template-columns:1fr;padding:1rem 1.5rem 3rem;}
-  nav{padding:1rem 1.5rem;}
-  nav ul{display:none;}
-  .categories{padding:2rem 1.5rem;}
-  .hero-stats{margin-top:1rem;}
-  footer{flex-direction:column;gap:1rem;text-align:center;padding:2rem 1.5rem;}
-}
-</style>
+    /* ── Specialty card hover overlay ── */
+    .specialty-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      aspect-ratio: 4/3;
+      cursor: pointer;
+    }
+    .specialty-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.45s ease;
+    }
+    .specialty-card:hover img {
+      transform: scale(1.05);
+    }
+    .specialty-card .card-name-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1.5rem 1.25rem 1.1rem;
+      background: linear-gradient(to top, rgba(10,22,40,0.88) 0%, rgba(10,22,40,0.3) 70%, transparent 100%);
+      transition: opacity 0.3s;
+    }
+    .specialty-card .card-name-overlay .card-title {
+      font-family: var(--font-family-heading);
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+    .specialty-card .card-name-overlay .card-bullets {
+      list-style: none;
+      padding: 0;
+    }
+    .specialty-card .card-name-overlay .card-bullets li {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.5;
+      padding-left: 0.9rem;
+      position: relative;
+    }
+    .specialty-card .card-name-overlay .card-bullets li::before {
+      content: "·";
+      position: absolute;
+      left: 0;
+      color: var(--color-teal);
+      font-weight: 700;
+    }
+    /* Article preview hover overlay */
+    .specialty-card .article-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(6px);
+      padding: 1.25rem 1.25rem 1.1rem;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      border-top: 3px solid var(--color-teal);
+    }
+    .specialty-card:hover .article-overlay {
+      transform: translateY(0);
+    }
+    .specialty-card:hover .card-name-overlay {
+      opacity: 0;
+    }
+    .article-overlay .article-title {
+      font-family: var(--font-family-heading);
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--color-navy);
+      line-height: 1.35;
+      margin-bottom: 0.3rem;
+    }
+    .article-overlay .journal-name {
+      font-size: 0.72rem;
+      font-style: italic;
+      color: var(--color-teal);
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+    .article-overlay .findings-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 0.4rem;
+    }
+    .article-overlay .findings-list {
+      list-style: none;
+      padding: 0;
+    }
+    .article-overlay .findings-list li {
+      font-size: 0.73rem;
+      color: #2d3748;
+      line-height: 1.5;
+      padding-left: 1rem;
+      position: relative;
+      margin-bottom: 0.2rem;
+    }
+    .article-overlay .findings-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--color-teal);
+      font-size: 0.65rem;
+      font-weight: 700;
+      top: 0.05rem;
+    }
+  </style>
 </head>
+
 <body>
-<div class="ambient"></div>
 
-<nav>
-  <div class="logo"><div class="logo-dot"></div>Dental<span>Pulse</span></div>
-  <ul>
-    <li><a href="#articles">Research</a></li>
-    <li><a href="#newsletter">Newsletter</a></li>
-    <li><a href="#newsletter" class="nav-cta">Subscribe Free</a></li>
-  </ul>
-</nav>
+<!-- ════════════════════════════════════
+  1. NAVIGATION
+════════════════════════════════════ -->
+<header style="position:sticky;top:0;z-index:50;width:100%;background:var(--color-navy);border-bottom:1px solid rgba(255,255,255,0.07);">
+  <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:64px;">
 
-<section class="hero">
-  <div class="hero-left">
-    <div class="hero-badge"><span class="live-dot"></span> AI-Summarized Daily</div>
-    <h1>Every Dental<br>Breakthrough,<br><span class="hl">Simplified.</span></h1>
-    <p class="hero-desc">DentalPulse scans hundreds of peer-reviewed journals daily — from JADA to IJOM — and distills cutting-edge research into clear, actionable summaries built for busy clinicians.</p>
-    <div class="hero-actions">
-      <button class="btn btn-primary" onclick="document.getElementById('articles').scrollIntoView({behavior:'smooth'})">Read Today's Research ↓</button>
-      <button class="btn btn-ghost" onclick="document.getElementById('newsletter').scrollIntoView({behavior:'smooth'})">Get the Newsletter</button>
-    </div>
+    <!-- Logo -->
+    <a href="#" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+      <div style="width:22px;height:22px;background:var(--color-orange);border-radius:5px;"></div>
+      <span style="font-family:var(--font-family-heading);font-weight:800;font-size:1.2rem;color:#fff;letter-spacing:-0.02em;">DentalPulse</span>
+    </a>
+
+    <!-- Nav links -->
+    <nav style="display:flex;align-items:center;gap:2rem;">
+      <a href="#research" class="nav-link">Research</a>
+      <a href="#newsletter" class="nav-link">Newsletter</a>
+      <a href="#specialties" class="nav-link">Specialties</a>
+      <a href="#about" class="nav-link">About</a>
+    </nav>
+
+    <!-- CTA -->
+    <a href="#about"
+       style="background:var(--color-orange);color:#fff;font-size:0.875rem;font-weight:600;padding:0.5rem 1.3rem;border-radius:9999px;text-decoration:none;transition:opacity 0.2s;"
+       onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+      Subscribe Free
+    </a>
   </div>
-  <div class="hero-stats">
-    <div class="stat-box"><div class="stat-num accent" id="c1">147</div><div class="stat-label">Journals Monitored</div></div>
-    <div class="stat-box"><div class="stat-num" id="c2">—</div><div class="stat-label">Articles Summarized</div></div>
-    <div class="stat-box"><div class="stat-num accent" id="c3">—</div><div class="stat-label">Subscribers</div></div>
-    <div class="stat-box"><div class="stat-num">8</div><div class="stat-label">Specialty Areas</div></div>
+</header>
+
+
+<!-- ════════════════════════════════════
+  2. HERO SECTION — Compact dark
+════════════════════════════════════ -->
+<section style="background:var(--color-navy);position:relative;overflow:hidden;min-height:340px;">
+
+  <svg viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;position:relative;z-index:2;max-height:280px;">
+    <defs>
+      <radialGradient id="gTeal" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="#00B4D8" stop-opacity=".28"/>
+        <stop offset="55%"  stop-color="#00B4D8" stop-opacity=".06"/>
+        <stop offset="100%" stop-color="#00B4D8" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="9" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <pattern id="wp" x="0" y="0" width="14" height="18" patternUnits="userSpaceOnUse">
+        <rect x="2"  y="2"  width="4" height="6" fill="rgba(255,255,255,.12)" rx=".5"/>
+        <rect x="8"  y="2"  width="4" height="6" fill="rgba(255,255,255,.08)" rx=".5"/>
+        <rect x="2"  y="11" width="4" height="6" fill="rgba(255,255,255,.10)" rx=".5"/>
+        <rect x="8"  y="11" width="4" height="6" fill="rgba(255,255,255,.06)" rx=".5"/>
+      </pattern>
+      <pattern id="wpt" x="0" y="0" width="14" height="18" patternUnits="userSpaceOnUse">
+        <rect x="2"  y="2"  width="4" height="6" fill="rgba(0,180,216,.38)" rx=".5"/>
+        <rect x="8"  y="2"  width="4" height="6" fill="rgba(0,180,216,.22)" rx=".5"/>
+        <rect x="2"  y="11" width="4" height="6" fill="rgba(0,180,216,.30)" rx=".5"/>
+        <rect x="8"  y="11" width="4" height="6" fill="rgba(0,180,216,.16)" rx=".5"/>
+      </pattern>
+      <linearGradient id="bFade" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="60%" stop-color="#0A1628" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#0A1628" stop-opacity="1"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Ground grid -->
+    <g opacity=".18" stroke="#1e3a5a" stroke-width="1">
+      <line x1="0"    y1="220" x2="1200" y2="140"/>
+      <line x1="0"    y1="250" x2="1200" y2="170"/>
+      <line x1="0"    y1="280" x2="1200" y2="200"/>
+      <line x1="0"    y1="190" x2="1200" y2="110"/>
+      <line x1="100"  y1="100" x2="0"    y2="180"/>
+      <line x1="300"  y1="100" x2="150"  y2="180"/>
+      <line x1="500"  y1="100" x2="350"  y2="180"/>
+      <line x1="700"  y1="100" x2="550"  y2="180"/>
+      <line x1="900"  y1="100" x2="750"  y2="180"/>
+      <line x1="1100" y1="100" x2="950"  y2="180"/>
+    </g>
+
+    <!-- Teal glow pool -->
+    <ellipse cx="530" cy="230" rx="200" ry="80" fill="url(#gTeal)"/>
+
+    <!-- Far-left small block -->
+    <polygon points="70,185 130,160 190,185 190,238 130,263 70,238" fill="#0d1f35"/>
+    <polygon points="70,185 130,160 130,120 70,145" fill="#112240"/>
+    <polygon points="130,160 190,185 190,145 130,120" fill="#0f1e33"/>
+
+    <!-- Left mid -->
+    <polygon points="160,175 230,148 300,175 300,232 230,259 160,232" fill="#0c1d31"/>
+    <polygon points="160,175 230,148 230,98 160,125" fill="#112540"/>
+    <polygon points="230,148 300,175 300,125 230,98" fill="#0e2038"/>
+    <rect x="163" y="108" width="62" height="52" fill="url(#wp)" opacity=".55"/>
+    <rect x="232" y="112" width="63" height="48" fill="url(#wp)" opacity=".38"/>
+
+    <!-- Left-center tall -->
+    <polygon points="285,210 375,178 465,210 465,272 375,304 285,272" fill="#0a1a2e"/>
+    <polygon points="285,210 375,178 375,98 285,130" fill="#102035"/>
+    <polygon points="375,178 465,210 465,130 375,98" fill="#0c1c30"/>
+    <rect x="288" y="108" width="82" height="82" fill="url(#wp)" opacity=".46"/>
+    <rect x="378" y="112" width="82" height="78" fill="url(#wp)" opacity=".32"/>
+
+    <!-- Central TEAL building -->
+    <polygon points="455,192 560,155 665,192 665,262 560,299 455,262" fill="#061525"/>
+    <polygon points="455,192 560,155 560,58 455,95" fill="#0a2540" filter="url(#glow)"/>
+    <polygon points="560,155 665,192 665,95 560,58" fill="#081e35"/>
+    <rect x="458" y="70" width="98" height="85" fill="url(#wpt)" opacity=".92"/>
+    <rect x="562" y="75" width="98" height="80" fill="url(#wpt)" opacity=".72"/>
+    <!-- Antenna + beacon -->
+    <line x1="560" y1="58" x2="560" y2="34" stroke="#00B4D8" stroke-width="2.5" opacity=".9" filter="url(#glow)"/>
+    <circle cx="560" cy="30" r="5.5" fill="#00B4D8" filter="url(#glow)"/>
+    <circle cx="560" cy="30" r="12"  fill="rgba(0,180,216,.28)" filter="url(#glow)">
+      <animate attributeName="r" values="10;18;10" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".3;.06;.3" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Right-center -->
+    <polygon points="655,200 750,170 845,200 845,262 750,292 655,262" fill="#0c1d31"/>
+    <polygon points="655,200 750,170 750,100 655,130" fill="#112540"/>
+    <polygon points="750,170 845,200 845,130 750,100" fill="#0e2038"/>
+    <rect x="658" y="112" width="86" height="74" fill="url(#wp)" opacity=".5"/>
+    <rect x="752" y="116" width="87" height="70" fill="url(#wp)" opacity=".36"/>
+
+    <!-- Right mid -->
+    <polygon points="800,215 890,182 980,215 980,272 890,305 800,272" fill="#0a1a2e"/>
+    <polygon points="800,215 890,182 890,120 800,153" fill="#112240"/>
+    <polygon points="890,182 980,215 980,153 890,120" fill="#0e1e35"/>
+    <rect x="803" y="133" width="82" height="68" fill="url(#wp)" opacity=".44"/>
+
+    <!-- Far-right narrow tall -->
+    <polygon points="940,180 1005,152 1070,180 1070,238 1005,266 940,238" fill="#0c1d31"/>
+    <polygon points="940,180 1005,152 1005,82 940,110" fill="#112240"/>
+    <polygon points="1005,152 1070,180 1070,110 1005,82" fill="#0f2038"/>
+    <rect x="943" y="94" width="57" height="78" fill="url(#wp)" opacity=".48"/>
+    <rect x="1007" y="98" width="57" height="72" fill="url(#wp)" opacity=".33"/>
+
+    <!-- Far-right squat -->
+    <polygon points="1040,200 1110,172 1180,200 1180,252 1110,280 1040,252" fill="#0a1a2e"/>
+    <polygon points="1040,200 1110,172 1110,120 1040,148" fill="#112240"/>
+    <polygon points="1110,172 1180,200 1180,148 1110,120" fill="#0d1e33"/>
+
+    <!-- Animated particles -->
+    <circle cx="405" cy="82" r="3" fill="#00B4D8" opacity=".6">
+      <animate attributeName="cy" values="82;66;82" dur="3.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values=".6;1;.6" dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="690" cy="60" r="2.5" fill="#FA4E03" opacity=".7">
+      <animate attributeName="cy" values="60;45;60" dur="2.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="560" cy="14" r="3.5" fill="#00B4D8" opacity=".5">
+      <animate attributeName="cy" values="14;2;14" dur="3.6s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Bottom fade -->
+    <rect x="0" y="0" width="1200" height="320" fill="url(#bFade)"/>
+  </svg>
+
+  <!-- Title + Tagline — centred over the city art -->
+  <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:4;pointer-events:none;">
+    <h1 style="font-family:var(--font-family-heading);font-weight:800;font-size:clamp(4rem,11vw,8rem);color:#fff;letter-spacing:-0.05em;line-height:1;margin-bottom:0.5rem;text-shadow:0 4px 40px rgba(0,0,0,0.5);">DentalPulse</h1>
+    <p style="color:rgba(255,255,255,0.55);font-size:0.82rem;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;">Stay Sharp. Stay Current.</p>
   </div>
+
 </section>
 
-<section class="categories">
-  <p class="section-eyebrow">Browse by Specialty</p>
-  <div class="cats-scroll">
-    <div class="cat-chip active" onclick="filterCat('all',this)">All Specialties</div>
-    <div class="cat-chip" onclick="filterCat('orthodontics',this)">Orthodontics</div>
-    <div class="cat-chip" onclick="filterCat('periodontics',this)">Periodontics</div>
-    <div class="cat-chip" onclick="filterCat('endodontics',this)">Endodontics</div>
-    <div class="cat-chip" onclick="filterCat('oral_surgery',this)">Oral Surgery</div>
-    <div class="cat-chip" onclick="filterCat('restorative',this)">Restorative</div>
-    <div class="cat-chip" onclick="filterCat('implantology',this)">Implantology</div>
-    <div class="cat-chip" onclick="filterCat('pediatric',this)">Pediatric</div>
-    <div class="cat-chip" onclick="filterCat('oral_medicine',this)">Oral Medicine</div>
-  </div>
-</section>
 
-<div class="main-grid" id="articles">
-  <div>
-    <div class="articles-header">
-      <h2>Latest Research — <span id="today-date"></span></h2>
-      <button class="refresh-btn" onclick="loadArticles()">⟳ Refresh</button>
-    </div>
-    <div class="articles-list" id="articles-list"></div>
-  </div>
 
-  <div class="sidebar" id="newsletter">
-    <div class="newsletter-box">
-      <p class="section-eyebrow" style="margin-bottom:0.75rem">Daily Digest</p>
-      <h3>Never Miss a Breakthrough</h3>
-      <p>Get AI-summarized dental research delivered every morning before rounds. Curated by specialty, clinically relevant, always free.</p>
-      <div class="email-form" id="email-form">
-        <input type="text" class="email-input" id="name-input" placeholder="Your name"/>
-        <input type="email" class="email-input" id="email-input" placeholder="your@email.com"/>
-        <select class="email-input" id="spec-select" style="cursor:pointer;font-family:'Lora',serif;">
-          <option value="all">All Specialties</option>
-          <option value="orthodontics">Orthodontics</option>
-          <option value="periodontics">Periodontics</option>
-          <option value="endodontics">Endodontics</option>
-          <option value="oral_surgery">Oral Surgery</option>
-          <option value="restorative">Restorative Dentistry</option>
-          <option value="implantology">Implantology</option>
-          <option value="pediatric">Pediatric Dentistry</option>
-          <option value="oral_medicine">Oral Medicine</option>
-        </select>
-        <button class="subscribe-btn" id="subscribe-btn" onclick="handleSub()">Subscribe — It's Free →</button>
-        <p class="subscribe-note">No spam. Unsubscribe anytime.</p>
+
+<!-- ════════════════════════════════════
+  4. VALUE PROP — Every Dental Breakthrough
+════════════════════════════════════ -->
+<section id="research" style="background:#fff;padding:6rem 0;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;">
+
+    <!-- Left -->
+    <div>
+      <p style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-orange);margin-bottom:1.25rem;">What we do</p>
+      <h2 style="font-family:var(--font-family-heading);font-weight:800;font-size:clamp(2rem,4.5vw,3.4rem);line-height:1.08;letter-spacing:-0.035em;color:var(--color-navy);margin-bottom:1.5rem;">
+        Every Dental<br/>Breakthrough,<br/>Simplified.
+      </h2>
+      <p class="section-sub" style="max-width:430px;margin-bottom:2.25rem;">
+        DentalPulse monitors hundreds of peer-reviewed journals and converts cutting-edge research into digestible summaries for clinicians. Curated by specialty, clinically relevant, always free.
+      </p>
+      <a href="#about"
+         style="display:inline-flex;align-items:center;gap:0.5rem;color:var(--color-navy);font-size:0.9rem;font-weight:700;text-decoration:none;border-bottom:2.5px solid var(--color-orange);padding-bottom:3px;transition:color 0.2s;"
+         onmouseover="this.style.color='var(--color-orange)'" onmouseout="this.style.color='var(--color-navy)'">
+        Get the Newsletter
+        <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <!-- Mini stat pills -->
+      <div style="display:flex;gap:1.25rem;margin-top:2.75rem;flex-wrap:wrap;">
+        <div style="background:#fff2ea;border-radius:14px;padding:1rem 1.5rem;">
+          <div style="font-family:var(--font-family-heading);font-weight:800;font-size:2rem;color:var(--color-orange);line-height:1;">147</div>
+          <div style="font-size:0.78rem;color:#777;margin-top:0.3rem;">Journals monitored</div>
+        </div>
+        <div style="background:#e8f8ff;border-radius:14px;padding:1rem 1.5rem;">
+          <div style="font-family:var(--font-family-heading);font-weight:800;font-size:2rem;color:var(--color-teal);line-height:1;">8</div>
+          <div style="font-size:0.78rem;color:#777;margin-top:0.3rem;">Specialty areas</div>
+        </div>
+        <div style="background:#fffaed;border-radius:14px;padding:1rem 1.5rem;">
+          <div style="font-family:var(--font-family-heading);font-weight:800;font-size:2rem;color:var(--color-yellow);line-height:1;">Daily</div>
+          <div style="font-size:0.78rem;color:#777;margin-top:0.3rem;">AI summaries</div>
+        </div>
       </div>
-      <div class="success-msg" id="success-msg"><p>✓ You're on the list! First digest arrives tomorrow morning.</p></div>
-      <div class="error-msg" id="error-msg"><p id="error-text">Something went wrong. Please try again.</p></div>
     </div>
 
-    <div class="preview-box">
-      <h3>📋 Today's Digest Preview</h3>
-      <div class="preview-date" id="preview-date"></div>
-      <div id="preview-items"><div style="font-family:'Syne',sans-serif;font-size:0.78rem;color:var(--muted);">Loading preview...</div></div>
+    <!-- Right: isometric cubes -->
+    <div style="display:flex;align-items:center;justify-content:center;position:relative;">
+      <svg viewBox="0 0 480 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;">
+        <!-- bg circle -->
+        <circle cx="240" cy="230" r="185" fill="#f0f9ff"/>
+
+        <!-- Cube 1 — large centre-left (teal/navy) -->
+        <g transform="translate(100,70)">
+          <polygon points="90,0 180,52 90,104 0,52" fill="#00B4D8"/>
+          <polygon points="0,52 90,104 90,244 0,192" fill="#FA4E03"/>
+          <polygon points="180,52 90,104 90,244 180,192" fill="#c73c00"/>
+          <line x1="90" y1="0" x2="90" y2="104" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/>
+        </g>
+
+        <!-- Cube 2 — small top-right -->
+        <g transform="translate(308,42) scale(0.52)">
+          <polygon points="90,0 180,52 90,104 0,52" fill="#FABC3C"/>
+          <polygon points="0,52 90,104 90,244 0,192" fill="#FA4E03"/>
+          <polygon points="180,52 90,104 90,244 180,192" fill="#c73c00"/>
+        </g>
+
+        <!-- Cube 3 — small left lower (navy) -->
+        <g transform="translate(48,210) scale(0.46)">
+          <polygon points="90,0 180,52 90,104 0,52" fill="#0A1628"/>
+          <polygon points="0,52 90,104 90,244 0,192" fill="#071020"/>
+          <polygon points="180,52 90,104 90,244 180,192" fill="#05091a"/>
+        </g>
+
+        <!-- Cube 4 — medium right-bottom (teal) -->
+        <g transform="translate(308,248) scale(0.6)">
+          <polygon points="90,0 180,52 90,104 0,52" fill="#00B4D8"/>
+          <polygon points="0,52 90,104 90,244 0,192" fill="#007fa0"/>
+          <polygon points="180,52 90,104 90,244 180,192" fill="#005f78"/>
+        </g>
+
+        <!-- Cube 5 — tiny bottom centre -->
+        <g transform="translate(192,355) scale(0.35)">
+          <polygon points="90,0 180,52 90,104 0,52" fill="#FABC3C"/>
+          <polygon points="0,52 90,104 90,244 0,192" fill="#FA4E03"/>
+          <polygon points="180,52 90,104 90,244 180,192" fill="#c73c00"/>
+        </g>
+
+        <!-- Decorative dots -->
+        <circle cx="118" cy="118" r="5.5" fill="var(--color-orange)" opacity=".35"/>
+        <circle cx="385" cy="190" r="4.5" fill="var(--color-teal)"   opacity=".45"/>
+        <circle cx="92"  cy="360" r="6.5" fill="var(--color-yellow)" opacity=".38"/>
+        <circle cx="408" cy="390" r="3.5" fill="var(--color-navy)"   opacity=".45"/>
+      </svg>
+
+      <!-- Floating chip -->
+      <div style="position:absolute;bottom:18px;left:8px;background:var(--color-navy);color:#fff;border-radius:11px;padding:0.55rem 1rem;font-size:0.73rem;font-weight:600;letter-spacing:0.03em;display:flex;align-items:center;gap:0.5rem;white-space:nowrap;">
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--color-teal);"></div>
+        AI-Powered · Peer-Reviewed · Free
+      </div>
     </div>
 
-    <div class="trending-box">
-      <h3>🔥 Trending This Week</h3>
-      <div id="trending-list"><div style="font-family:'Syne',sans-serif;font-size:0.78rem;color:var(--muted);">Loading...</div></div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+  5. SPECIALTIES SECTION — 4×2 grid
+════════════════════════════════════ -->
+<section id="specialties" style="background:var(--color-cream);padding:6rem 0;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;">
+
+    <!-- Header -->
+    <div style="margin-bottom:2.75rem;">
+      <h2 style="font-family:var(--font-family-heading);font-weight:800;font-size:clamp(2rem,4.5vw,3.1rem);letter-spacing:-0.035em;color:var(--color-navy);display:inline-flex;align-items:center;gap:0.65rem;">
+        Specialties.
+        <span style="display:inline-block;width:18px;height:18px;background:var(--color-orange);border-radius:4px;vertical-align:middle;"></span>
+      </h2>
+      <p class="section-sub" style="margin-top:0.75rem;max-width:560px;">
+        Hover any card to see which journals we source for that specialty.
+      </p>
     </div>
+
+    <!-- 4×2 Cards grid -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;">
+
+      <!-- Orthodontics -->
+      <div class="specialty-card">
+        <img src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=600&h=450&fit=crop" alt="Orthodontics"/>
+        <div class="card-name-overlay">
+          <div class="card-title">Orthodontics</div>
+          <ul class="card-bullets">
+            <li>Accelerated tooth movement with photobiomodulation</li>
+            <li>Clear aligner biomechanics update</li>
+            <li>Reduced treatment times in adults</li>
+          </ul>
+        </div>
+        <div class="article-overlay">
+          <div class="findings-label">Journals Sourced</div>
+          <ul class="findings-list">
+            <li>American Journal of Orthodontics and Dentofacial Orthopedics</li>
+            <li>Journal of Orthodontics</li>
+            <li>Angle Orthodontist</li>
+            <li>European Journal of Orthodontics</li>
+            <li>Orthodontics & Craniofacial Research</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Periodontics -->
+      <div class="specialty-card">
+        <img src="images/periodontics.png" alt="Periodontics"/>
+        <div class="card-name-overlay">
+          <div class="card-title">Periodontics</div>
+          <ul class="card-bullets">
+            <li>Microbiome shifts post-SRP</li>
+            <li>Stage III periodontitis outcomes</li>
+            <li>Probiotic adjunct therapy</li>
+          </ul>
+        </div>
+        <div class="article-overlay">
+          <div class="findings-label">Journals Sourced</div>
+          <ul class="findings-list">
+            <li>Journal of Periodontology</li>
+            <li>Journal of Clinical Periodontology</li>
+            <li>Periodontology 2000</li>
+            <li>Journal of Periodontal Research</li>
+            <li>Clinical Oral Investigations</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Endodontics -->
+      <div class="specialty-card">
+        <img src="https://images.unsplash.com/photo-1598256989800-fe5f95da9787?w=600&h=450&fit=crop" alt="Endodontics"/>
+        <div class="card-name-overlay">
+          <div class="card-title">Endodontics</div>
+          <ul class="card-bullets">
+            <li>NiTi rotary vs reciprocating systems</li>
+            <li>Curved canal preparation outcomes</li>
+            <li>Fracture rate comparison</li>
+          </ul>
+        </div>
+        <div class="article-overlay">
+          <div class="findings-label">Journals Sourced</div>
+          <ul class="findings-list">
+            <li>International Endodontic Journal</li>
+            <li>Journal of Endodontics</li>
+            <li>Australian Endodontic Journal</li>
+            <li>Endodontology</li>
+            <li>European Journal of Dentistry</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Oral Surgery -->
+      <div class="specialty-card">
+        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&h=450&fit=crop" alt="Oral Surgery"/>
+        <div class="card-name-overlay">
+          <div class="card-title">Oral Surgery</div>
+          <ul class="card-bullets">
+            <li>PRF membranes in extraction socket healing</li>
+            <li>Pain reduction at 48 hours post-op</li>
+            <li>Dry socket incidence study</li>
+          </ul>
+        </div>
+        <div class="article-overlay">
+          <div class="findings-label">Journals Sourced</div>
+          <ul class="findings-list">
+            <li>Journal of Oral and Maxillofacial Surgery</li>
+            <li>British Journal of Oral and Maxillofacial Surgery</li>
+            <li>Oral Surgery, Oral Medicine, Oral Pathology</li>
+            <li>International Journal of Oral and Maxillofacial Surgery</li>
+            <li>Journal of Craniofacial Surgery</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Implantology -->
+      <div class="specialty-card">
+        <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=600&h=450&fit=crop" alt="Implantology"/>
+        <div class="card-name-overlay">
+          <div class="card-title">Implantology</div>
+          <ul class="card-bullets">
+            <li>Platform switching & crestal bone stability</li>
+            <li>5-year ISQ value tracking</li>
+            <li>Peri-implant tissue health scores</li>
+          </ul>
+        </div>
+        <div class="article-overlay">
+          <div class="findings-label">Journals Sourced</div>
+          <ul class="findings-list">
+            <li>Clinical Oral Implants Research</li>
+            <li>International Journal of Oral & Maxillofacial Implants</li>
+            <li>Journal of Dental Research</li>
+            <li>Implant Dentistry</li>
+            <li>European Journal of Oral Implantology</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Restorative -->
+      <div class="specialty-card">
+        <img src="https://images.unsplash.com/photo-1502325966718-85a90488dc29?w=600&h=450&fit=crop" alt="Restorative"/>
+        <div class="card-name-overlay">
+          <div class="card-title">Restorative</div>
+          <ul class="card-bullets">
+            <li>Bulk-fill vs incremental composites</li>
+            <li>3-year marginal integrity outcomes</li>
+            <li>Micro-CT void analysis</li>
+          </ul>
+        </div>
+        <div class="article-overlay">
+          <div class="findings-label">Journals Sourced</div>
+          <ul class="findings-list">
+            <li>Operative Dentistry</li>
+            <li>Journal of Dental Research</li>
+            <li>Journal of Esthetic and Restorative Dentistry</li>
+            <li>Dental Materials</li>
+            <li>Journal of Adhesive Dentistry</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Pediatric Dentistry -->
+      <div class="specialty-card">
+        <img src="https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=600&h=450&fit=crop" alt="Pediatric Dentistry"/>
+        <div class="card-name-overlay">
+          <div class="card-title">Pediatric Dentistry</div>
+          <ul class="card-bullets">
+            <li>Silver diamine fluoride in primary molars</li>
+            <li>Caries arrest at 12 months</li>
+            <li>Cost-effectiveness analysis</li>
+          </ul>
+        </div>
+        <div class="article-overlay">
+          <div class="findings-label">Journals Sourced</div>
+          <ul class="findings-list">
+            <li>Pediatric Dentistry</li>
+            <li>International Journal of Paediatric Dentistry</li>
+            <li>European Archives of Paediatric Dentistry</li>
+            <li>Journal of Clinical Pediatric Dentistry</li>
+            <li>Journal of Dentistry for Children</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Oral Medicine -->
+      <div class="specialty-card">
+        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&h=450&fit=crop" alt="Oral Medicine"/>
+        <div class="card-name-overlay">
+          <div class="card-title">Oral Medicine</div>
+          <ul class="card-bullets">
+            <li>LLLT for recurrent aphthous stomatitis</li>
+            <li>Ulcer healing time reduction</li>
+            <li>6-month recurrence frequency</li>
+          </ul>
+        </div>
+        <div class="article-overlay">
+          <div class="findings-label">Journals Sourced</div>
+          <ul class="findings-list">
+            <li>Oral Surgery, Oral Medicine, Oral Pathology, Oral Radiology</li>
+            <li>Journal of Oral Pathology & Medicine</li>
+            <li>Oral Diseases</li>
+            <li>Journal of Oral Medicine and Oral Surgery</li>
+            <li>Oral Oncology</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA below cards -->
+    <div style="text-align:center;margin-top:3rem;">
+      <a href="#about"
+         style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--color-navy);color:#fff;font-size:0.875rem;font-weight:600;text-decoration:none;padding:0.75rem 1.75rem;border-radius:9999px;transition:opacity 0.2s;"
+         onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        Subscribe for daily research across all 8 specialties
+        <svg width="14" height="14" fill="none" viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+  FREE DAILY DIGEST SECTION
+════════════════════════════════════ -->
+<section style="background:#fff;padding:5rem 0;border-top:1px solid #e8eaed;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1.5rem;align-items:start;">
+
+      <div style="grid-column:span 2;">
+        <p style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-orange);margin-bottom:1rem;">Free Daily Digest</p>
+        <h2 style="font-family:var(--font-family-heading);font-weight:800;font-size:clamp(1.75rem,3.5vw,2.6rem);line-height:1.1;letter-spacing:-0.03em;color:var(--color-navy);margin-bottom:1rem;">
+          Research that fits<br/>between patients.
+        </h2>
+        <p class="section-sub" style="max-width:420px;margin-bottom:2rem;">
+          Every morning we scan 147+ journals, extract the clinically relevant findings, and send you a concise digest — curated to your specialty, ready before rounds.
+        </p>
+        <a href="#about"
+           style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--color-orange);color:#fff;font-size:0.875rem;font-weight:700;text-decoration:none;padding:0.7rem 1.5rem;border-radius:9999px;transition:opacity .2s;"
+           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          Subscribe — It's Free
+          <svg width="14" height="14" fill="none" viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <!-- Feature list -->
+      <div style="display:flex;flex-direction:column;gap:1.25rem;padding-top:0.25rem;">
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,180,216,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="#00B4D8" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="#00B4D8" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div style="font-family:var(--font-family-heading);font-weight:700;font-size:0.95rem;color:var(--color-navy);margin-bottom:0.2rem;">Before Morning Rounds</div>
+            <div style="font-size:0.82rem;color:#64748b;line-height:1.5;">Arrives in your inbox by 6 AM every day.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,180,216,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M2 8h12M8 2l6 6-6 6" stroke="#00B4D8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div style="font-family:var(--font-family-heading);font-weight:700;font-size:0.95rem;color:var(--color-navy);margin-bottom:0.2rem;">Curated by Specialty</div>
+            <div style="font-size:0.82rem;color:#64748b;line-height:1.5;">Only the research relevant to your clinical area.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(0,180,216,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="10" rx="2" stroke="#00B4D8" stroke-width="1.5"/><path d="M5 7h6M5 10h4" stroke="#00B4D8" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div style="font-family:var(--font-family-heading);font-weight:700;font-size:0.95rem;color:var(--color-navy);margin-bottom:0.2rem;">AI Summarised</div>
+            <div style="font-size:0.82rem;color:#64748b;line-height:1.5;">Key findings distilled to 3 bullet points per paper.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:1.25rem;padding-top:0.25rem;">
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(250,78,3,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M4 2h8a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="#FA4E03" stroke-width="1.5"/><path d="M5 6h6M5 9h4" stroke="#FA4E03" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div style="font-family:var(--font-family-heading);font-weight:700;font-size:0.95rem;color:var(--color-navy);margin-bottom:0.2rem;">Peer-Reviewed Only</div>
+            <div style="font-size:0.82rem;color:#64748b;line-height:1.5;">No opinion pieces. Only indexed clinical research.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(250,78,3,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M2 8h4l2-5 2 10 2-5h2" stroke="#FA4E03" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div style="font-family:var(--font-family-heading);font-weight:700;font-size:0.95rem;color:var(--color-navy);margin-bottom:0.2rem;">DOI Links Included</div>
+            <div style="font-size:0.82rem;color:#64748b;line-height:1.5;">Every summary links directly to the original paper.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(250,78,3,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M8 2v12M2 8h12" stroke="#FA4E03" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div style="font-family:var(--font-family-heading);font-weight:700;font-size:0.95rem;color:var(--color-navy);margin-bottom:0.2rem;">Always Free</div>
+            <div style="font-size:0.82rem;color:#64748b;line-height:1.5;">No paywall, no subscription fee, no catch.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+  6. DARK STATS SECTION
+════════════════════════════════════ -->
+<section style="background:var(--color-navy);padding:5rem 0;position:relative;overflow:hidden;">
+
+  <!-- Watermark -->
+  <div style="position:absolute;top:-2rem;left:-3rem;font-family:var(--font-family-heading);font-weight:800;font-size:18rem;color:rgba(255,255,255,.018);line-height:1;pointer-events:none;user-select:none;">DP</div>
+
+  <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;position:relative;z-index:1;">
+
+    <!-- Stats grid -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2.5rem;">
+
+      <div>
+        <div class="stat-num" style="font-size:3.75rem;">147<span style="color:var(--color-orange);">+</span></div>
+        <div style="color:rgba(255,255,255,.45);font-size:0.84rem;margin-top:0.6rem;line-height:1.45;font-weight:500;">Journals<br/>monitored</div>
+      </div>
+      <div>
+        <div class="stat-num" style="font-size:3.75rem;">8<span style="color:var(--color-teal);font-size:2rem;"> areas</span></div>
+        <div style="color:rgba(255,255,255,.45);font-size:0.84rem;margin-top:0.6rem;line-height:1.45;font-weight:500;">Dental<br/>specialties</div>
+      </div>
+      <div>
+        <div class="stat-num" style="font-size:3.75rem;">Daily<span style="color:var(--color-yellow);font-size:1.5rem;"> digest</span></div>
+        <div style="color:rgba(255,255,255,.45);font-size:0.84rem;margin-top:0.6rem;line-height:1.45;font-weight:500;">AI-summarised<br/>research</div>
+      </div>
+      <div>
+        <div class="stat-num" style="font-size:3.75rem;">Free<span style="color:var(--color-orange);font-size:1.5rem;"> always</span></div>
+        <div style="color:rgba(255,255,255,.45);font-size:0.84rem;margin-top:0.6rem;line-height:1.45;font-weight:500;">For every<br/>clinician</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+  7. ABOUT SECTION
+════════════════════════════════════ -->
+<section id="about" style="background:var(--color-cream);padding:6rem 0;border-top:1px solid #e8eaed;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;">
+
+    <!-- Left: heading + about copy -->
+    <div>
+      <p style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-teal);margin-bottom:1.25rem;">About DentalPulse</p>
+      <h2 style="font-family:var(--font-family-heading);font-weight:800;font-size:clamp(2rem,4vw,3rem);line-height:1.1;letter-spacing:-0.035em;color:var(--color-navy);margin-bottom:1.5rem;">
+        Never Miss a<br/>Breakthrough.
+      </h2>
+      <p class="section-sub" style="max-width:480px;line-height:1.75;">
+        DentalPulse is an AI-powered research digest that monitors 147+ peer-reviewed dental journals — including JADA, IJOM, Journal of Periodontology, and more — and distils the most clinically relevant findings into concise morning summaries. Our AI reads so you don't have to. We cover 8 dental specialties and deliver research straight to your inbox, every morning, for free.
+      </p>
+    </div>
+
+    <!-- Right: subscribe form -->
+    <div style="background:#fff;border-radius:20px;padding:2.5rem;border:1px solid #e8eaed;">
+      <p style="font-family:var(--font-family-heading);font-weight:700;font-size:1.1rem;color:var(--color-navy);margin-bottom:0.5rem;">Free daily digest</p>
+      <p style="font-size:0.9rem;color:#64748b;line-height:1.6;margin-bottom:1.75rem;">Get AI-summarised dental research delivered every morning before rounds. Curated by specialty, clinically relevant, always free.</p>
+      <form id="subscribe-form" style="display:flex;flex-direction:column;gap:0.85rem;" onsubmit="handleSubscribe(event)">
+        <input type="email" id="email-input" placeholder="your@email.com" required
+               style="width:100%;padding:0.9rem 1.3rem;border-radius:12px;border:1.5px solid #d0d5dd;background:var(--color-cream);color:var(--color-navy);font-size:0.95rem;outline:none;transition:border-color .2s;font-family:var(--font-family-body);"
+               onfocus="this.style.borderColor='var(--color-teal)'" onblur="this.style.borderColor='#d0d5dd'"/>
+        <button type="submit"
+                style="display:flex;align-items:center;justify-content:center;gap:0.5rem;background:var(--color-orange);color:#fff;font-size:0.95rem;font-weight:700;padding:0.9rem 2rem;border-radius:9999px;border:none;cursor:pointer;transition:opacity .2s;width:100%;font-family:var(--font-family-heading);"
+                onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          Subscribe — It's Free
+          <svg width="16" height="16" fill="none" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </form>
+      <p id="subscribe-success" style="display:none;color:var(--color-green);font-size:0.85rem;margin-top:0.75rem;font-weight:600;font-family:var(--font-family-body);">✓ You're on the list! First digest arrives tomorrow morning.</p>
+      <p id="subscribe-error" style="display:none;color:#e53e3e;font-size:0.85rem;margin-top:0.75rem;font-family:var(--font-family-body);">Something went wrong. Please try again.</p>
+      <p style="color:#9ca3af;font-size:0.75rem;margin-top:0.85rem;font-family:var(--font-family-body);">No spam. Unsubscribe anytime.</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════
+  LATEST RESEARCH SECTION
+════════════════════════════════════ -->
+<section id="research" style="background:var(--color-cream);padding:6rem 0;border-top:1px solid #e8eaed;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <p style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-teal);margin-bottom:0.75rem;">Peer-Reviewed · AI Summarised</p>
+        <h2 style="font-family:var(--font-family-heading);font-weight:800;font-size:clamp(1.9rem,4vw,2.9rem);letter-spacing:-0.035em;color:var(--color-navy);display:inline-flex;align-items:center;gap:0.65rem;">
+          Latest Research —
+        </h2>
+      </div>
+      <button onclick="loadArticles(currentCat)" style="display:inline-flex;align-items:center;gap:0.4rem;background:none;border:1.5px solid #e2e8f0;border-radius:9999px;padding:0.45rem 1rem;font-size:0.78rem;font-weight:600;color:#64748b;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='var(--color-teal)';this.style.color='var(--color-teal)'" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#64748b'">
+        ⟳ Refresh
+      </button>
+    </div>
+
+    <!-- Specialty filter chips -->
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2rem;" id="cat-chips">
+      <div class="cat-chip active" onclick="filterCat('all',this)">All Specialties</div>
+      <div class="cat-chip" onclick="filterCat('orthodontics',this)">Orthodontics</div>
+      <div class="cat-chip" onclick="filterCat('periodontics',this)">Periodontics</div>
+      <div class="cat-chip" onclick="filterCat('endodontics',this)">Endodontics</div>
+      <div class="cat-chip" onclick="filterCat('oral_surgery',this)">Oral Surgery</div>
+      <div class="cat-chip" onclick="filterCat('restorative',this)">Restorative</div>
+      <div class="cat-chip" onclick="filterCat('implantology',this)">Implantology</div>
+      <div class="cat-chip" onclick="filterCat('pediatric',this)">Pediatric</div>
+      <div class="cat-chip" onclick="filterCat('oral_medicine',this)">Oral Medicine</div>
+    </div>
+
+    <!-- Main grid: articles list + sidebar -->
+    <div style="display:grid;grid-template-columns:1fr 300px;gap:2rem;align-items:start;">
+
+      <!-- Articles list -->
+      <div style="background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e8eaed;">
+        <div id="articles-list">
+          <!-- skeleton -->
+          <div class="skeleton-row"><div class="skel" style="height:12px;width:80px;margin-bottom:10px;"></div><div class="skel" style="height:18px;width:90%;margin-bottom:8px;"></div><div class="skel" style="height:14px;width:70%;"></div></div>
+          <div class="skeleton-row"><div class="skel" style="height:12px;width:90px;margin-bottom:10px;"></div><div class="skel" style="height:18px;width:85%;margin-bottom:8px;"></div><div class="skel" style="height:14px;width:65%;"></div></div>
+          <div class="skeleton-row"><div class="skel" style="height:12px;width:70px;margin-bottom:10px;"></div><div class="skel" style="height:18px;width:88%;margin-bottom:8px;"></div><div class="skel" style="height:14px;width:75%;"></div></div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div style="display:flex;flex-direction:column;gap:1.5rem;">
+        <!-- Trending box -->
+        <div style="background:#fff;border-radius:16px;padding:1.5rem;border:1px solid #e8eaed;">
+          <h3 style="font-family:var(--font-family-heading);font-weight:700;font-size:0.9rem;color:var(--color-navy);margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem;">
+            🔥 Trending This Week
+          </h3>
+          <div id="trending-list">
+            <div style="font-size:0.78rem;color:#9ca3af;">Loading...</div>
+          </div>
+        </div>
+        <!-- Subscribe nudge -->
+        <div style="background:var(--color-navy);border-radius:16px;padding:1.5rem;">
+          <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:0.75rem;">Daily Digest</div>
+          <p style="font-size:0.85rem;color:rgba(255,255,255,.75);line-height:1.6;margin-bottom:1.25rem;">Get all of this delivered to your inbox every morning. Free.</p>
+          <a href="#about" style="display:block;text-align:center;background:var(--color-orange);color:#fff;font-size:0.82rem;font-weight:700;padding:0.65rem 1rem;border-radius:9999px;text-decoration:none;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Subscribe Free →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Article modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="maybeCloseModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-body"></div>
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-overlay" onclick="maybeClose(event)">
-  <div class="modal"><button class="modal-close" onclick="closeModal()">✕</button><div id="modal-body"></div></div>
-</div>
+<!-- ════════════════════════════════════
+  FOOTER
+════════════════════════════════════ -->
+<footer style="background:var(--color-navy);padding:2.75rem 0;border-top:1px solid rgba(255,255,255,.07);">
+  <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;">
 
-<footer>
-  <p>© 2026 DentalPulse · AI-powered research digest for dental professionals</p>
-  <div class="footer-links"><a href="#">Privacy</a><a href="#">Unsubscribe</a><a href="#">About</a><a href="#">Contact</a></div>
+    <div style="display:flex;align-items:center;gap:0.5rem;">
+      <div style="width:20px;height:20px;background:var(--color-orange);border-radius:5px;"></div>
+      <span style="font-family:var(--font-family-heading);font-weight:800;font-size:1.1rem;color:#fff;letter-spacing:-0.02em;">DentalPulse</span>
+    </div>
+
+    <nav style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
+      <a href="#about"      style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">About</a>
+      <a href="#specialties" style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">Specialties</a>
+      <a href="#about"  style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">Newsletter</a>
+      <a href="#"           style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">Privacy</a>
+      <a href="#"           style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">Unsubscribe</a>
+      <a href="#"           style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">Contact</a>
+    </nav>
+
+    <p style="color:rgba(255,255,255,.22);font-size:0.74rem;">© 2026 DentalPulse · AI-powered research digest for dental professionals</p>
+
+  </div>
 </footer>
 
 <script>
-// ── CONFIG ─────────────────────────────────────────────────────────────────
-// UPDATE THIS LINE after deploying to Render:
-const API = 'https://dentalpulse-backend.onrender.com';
+/* ── Subscribe ── */
+async function handleSubscribe(e) {
+  e.preventDefault();
+  const email = document.getElementById('email-input').value;
+  const success = document.getElementById('subscribe-success');
+  const error   = document.getElementById('subscribe-error');
+  success.style.display = 'none';
+  error.style.display   = 'none';
+  try {
+    const res = await fetch('/api/subscribe', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email})
+    });
+    if (res.ok) { success.style.display = 'block'; document.getElementById('subscribe-form').reset(); }
+    else          error.style.display = 'block';
+  } catch { error.style.display = 'block'; }
+}
 
-const SPECIALTY_LABELS = {
-  orthodontics:'Orthodontics', periodontics:'Periodontics', endodontics:'Endodontics',
-  oral_surgery:'Oral Surgery', restorative:'Restorative', implantology:'Implantology',
-  pediatric:'Pediatric', oral_medicine:'Oral Medicine'
-};
-
+/* ── Articles ── */
+const API = window.location.origin;
 let currentCat = 'all';
 let allLoaded  = [];
 
-// ── SKELETONS ───────────────────────────────────────────────────────────────
-function showSkeletons() {
-  document.getElementById('articles-list').innerHTML = [1,2,3].map(()=>`
-    <div class="skeleton-card">
-      <div class="skel skel-tag"></div>
-      <div class="skel skel-title"></div>
-      <div class="skel skel-title2"></div>
-      <div class="skel skel-line"></div>
-      <div class="skel skel-line2"></div>
-      <div class="skel skel-line3"></div>
-    </div>
-  `).join('<div style="height:1px;background:var(--border)"></div>');
-}
+const SPECIALTY_LABELS = {
+  orthodontics:'Orthodontics', periodontics:'Periodontics', endodontics:'Endodontics',
+  oral_surgery:'Oral Surgery', restorative:'Restorative',  implantology:'Implantology',
+  pediatric:'Pediatric',       oral_medicine:'Oral Medicine'
+};
 
-// ── FETCH ARTICLES FROM BACKEND ─────────────────────────────────────────────
-async function loadArticles() {
-  showSkeletons();
+async function loadArticles(cat) {
+  currentCat = cat;
+  const url = cat === 'all'
+    ? `${API}/api/articles?limit=20`
+    : `${API}/api/articles?specialty=${cat}&limit=20`;
   try {
-    const url = currentCat === 'all'
-      ? `${API}/api/articles?limit=20`
-      : `${API}/api/articles?specialty=${currentCat}&limit=20`;
     const res      = await fetch(url);
     const articles = await res.json();
-    allLoaded = articles;
-    renderArticles(articles);
-    if (articles.length) renderPreview(articles);
-    if (articles.length) renderTrending(articles);
-  } catch(e) {
-    document.getElementById('articles-list').innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">🔌</div>
-        <p>Could not connect to the backend.<br/>Make sure the server is running at:<br/><strong style="color:var(--accent)">${API}</strong></p>
-      </div>`;
+    allLoaded = Array.isArray(articles) ? articles : [];
+    renderArticles(allLoaded);
+    renderTrending(allLoaded);
+  } catch {
+    document.getElementById('articles-list').innerHTML =
+      '<div style="padding:2rem 1.75rem;font-size:0.85rem;color:#9ca3af;">Could not load articles. Make sure the backend is running.</div>';
   }
 }
 
-// ── FETCH LIVE STATS ────────────────────────────────────────────────────────
-async function loadStats() {
-  try {
-    const res  = await fetch(`${API}/api/stats`);
-    const data = await res.json();
-    animateCounter('c2', data.articles_total  || 0);
-    animateCounter('c3', data.subscribers     || 0);
-  } catch(e) {}
+function filterCat(cat, el) {
+  document.querySelectorAll('#cat-chips .cat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  loadArticles(cat);
 }
 
-function animateCounter(id, target, dur=1200) {
-  const el = document.getElementById(id); if(!el) return;
-  let v=0; const step = target/(dur/16);
-  const t = setInterval(()=>{
-    v = Math.min(v+step, target);
-    el.textContent = Math.floor(v).toLocaleString();
-    if(v>=target) clearInterval(t);
-  }, 16);
-}
-
-// ── RENDER ARTICLES ─────────────────────────────────────────────────────────
 function renderArticles(list) {
   const el = document.getElementById('articles-list');
   if (!list.length) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><p>No articles found for this specialty yet.<br/>Run the pipeline to fetch some!</p></div>`;
+    el.innerHTML = '<div style="padding:2.5rem 1.75rem;text-align:center;font-size:0.85rem;color:#9ca3af;">No articles found for this specialty yet.</div>';
     return;
   }
-  el.innerHTML = list.map((a,i) => {
-    const label   = SPECIALTY_LABELS[a.specialty] || a.specialty || '';
-    const tagClass= `tag-${a.specialty}`;
-    const date    = a.pub_date ? new Date(a.pub_date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+  el.innerHTML = list.map((a, i) => {
+    const label    = SPECIALTY_LABELS[a.specialty] || a.specialty || '';
+    const tagClass = `a-tag a-tag-${a.specialty}`;
+    const impact   = a.impact_level || 'moderate';
+    const date     = a.published_date ? new Date(a.published_date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
     return `
-      <div class="article-card" onclick="openModal('${a.id}')" style="animation:fadeUp 0.5s ${i*0.07}s ease both">
-        <div class="card-meta">
-          <span class="card-tag ${tagClass}">${label}</span>
-          <span class="card-date">${date}</span>
-          <span class="card-journal">${(a.journal||'').slice(0,35)}</span>
-        </div>
-        <h3>${a.title}</h3>
-        <p class="summary">${a.ai_summary || ''}</p>
-        <div class="card-footer">
-          <button class="read-more">Read full summary →</button>
-          <span class="impact-badge impact-${a.impact_level||'moderate'}">${a.impact_level==='high'?'⬆ High Impact':'~ Moderate Impact'}</span>
-        </div>
+    <div class="article-card-row" onclick="openModal('${a.id}')" style="animation:fadeUp 0.4s ${i*0.06}s ease both;opacity:0;">
+      <div class="a-meta">
+        ${label ? `<span class="${tagClass}">${label}</span>` : ''}
+        ${date  ? `<span class="a-date">${date}</span>` : ''}
+        ${a.journal ? `<span class="a-journal">${a.journal}</span>` : ''}
       </div>
-    `;
+      <h3>${a.title || ''}</h3>
+      ${a.ai_summary ? `<p class="a-summary">${a.ai_summary}</p>` : ''}
+      <div class="a-footer">
+        <span class="impact-badge impact-${impact}">${impact === 'high' ? '⬆ High Impact' : '~ Moderate Impact'}</span>
+        <span class="a-read-more">Read more →</span>
+      </div>
+    </div>`;
   }).join('');
 }
 
-// ── FILTER ──────────────────────────────────────────────────────────────────
-function filterCat(cat, el) {
-  currentCat = cat;
-  document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  loadArticles();
+function renderTrending(list) {
+  const high = list.filter(a => a.impact_level === 'high').slice(0, 5);
+  const items = (high.length ? high : list.slice(0, 5));
+  document.getElementById('trending-list').innerHTML = items.map((a, i) => `
+    <div onclick="openModal('${a.id}')" style="display:flex;align-items:flex-start;gap:0.65rem;padding:0.6rem 0;${i < items.length-1 ? 'border-bottom:1px solid #f1f5f9;' : ''}cursor:pointer;">
+      <span style="font-size:1.1rem;font-weight:800;color:#e2e8f0;line-height:1;flex-shrink:0;width:20px;">${i+1}</span>
+      <span style="font-size:0.78rem;font-weight:600;color:var(--color-navy);line-height:1.4;transition:color .2s;" onmouseover="this.style.color='var(--color-teal)'" onmouseout="this.style.color='var(--color-navy)'">${a.title}</span>
+    </div>`).join('');
 }
 
-// ── MODAL ────────────────────────────────────────────────────────────────────
 async function openModal(id) {
   document.getElementById('modal-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  document.getElementById('modal-body').innerHTML = `<div style="padding:2rem;text-align:center;color:var(--muted);font-family:'Syne',sans-serif;">Loading...</div>`;
-
+  document.getElementById('modal-body').innerHTML = '<div style="padding:2rem;text-align:center;color:#9ca3af;font-size:0.9rem;">Loading...</div>';
   try {
     const res = await fetch(`${API}/api/articles/${id}`);
     const a   = await res.json();
-    const label   = SPECIALTY_LABELS[a.specialty] || a.specialty || '';
-    const tagClass= `tag-${a.specialty}`;
-    const date    = a.pub_date ? new Date(a.pub_date).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '';
-    const findings= (a.ai_findings||[]).map(f=>`<li><strong>→</strong> ${f}</li>`).join('');
-
+    const label    = SPECIALTY_LABELS[a.specialty] || a.specialty || '';
+    const tagClass = `a-tag a-tag-${a.specialty}`;
+    const impact   = a.impact_level || 'moderate';
+    const date     = a.published_date ? new Date(a.published_date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+    const findings = (a.ai_findings||[]).map(f=>`<li>${f}</li>`).join('');
     document.getElementById('modal-body').innerHTML = `
-      <div style="margin-bottom:0.75rem"><span class="card-tag ${tagClass}">${label}</span></div>
-      <h2>${a.title}</h2>
+      ${label ? `<div style="margin-bottom:0.75rem"><span class="${tagClass}">${label}</span></div>` : ''}
+      <h2>${a.title||''}</h2>
       <div class="modal-meta">
-        <span>📰 ${a.journal||''}</span>
-        <span>👤 ${a.authors||''}</span>
-        ${date?`<span>📅 ${date}</span>`:''}
-        ${a.doi?`<span>DOI: ${a.doi}</span>`:''}
-        <span class="impact-badge impact-${a.impact_level||'moderate'}">${a.impact_level==='high'?'⬆ High Impact':'~ Moderate Impact'}</span>
+        ${a.journal ? `<span>${a.journal}</span>` : ''}
+        ${date      ? `<span>${date}</span>` : ''}
+        ${a.authors ? `<span>${a.authors}</span>` : ''}
+        <span class="impact-badge impact-${impact}" style="margin-left:auto;">${impact==='high'?'⬆ High Impact':'~ Moderate Impact'}</span>
       </div>
-      <div class="modal-section"><h4>AI Summary</h4><p>${a.ai_summary||''}</p></div>
-      ${findings?`<div class="modal-section"><h4>Key Findings</h4><ul>${findings}</ul></div>`:''}
-      ${a.ai_implication?`<div class="modal-section"><h4>Clinical Implication</h4><p>${a.ai_implication}</p></div>`:''}
-      <div class="modal-footer">
-        ${a.doi?`<button class="doi-btn" onclick="window.open('https://doi.org/${a.doi}','_blank')">🔗 View Original Article</button>`:''}
-        <button class="doi-btn" onclick="closeModal()">← Back to Feed</button>
-      </div>
-    `;
-  } catch(e) {
-    document.getElementById('modal-body').innerHTML = `<p style="color:var(--muted);font-family:'Syne',sans-serif;">Could not load article details.</p>`;
+      ${a.ai_summary   ? `<div class="modal-section"><h4>AI Summary</h4><p>${a.ai_summary}</p></div>` : ''}
+      ${findings       ? `<div class="modal-section"><h4>Key Findings</h4><ul>${findings}</ul></div>` : ''}
+      ${a.ai_implication ? `<div class="modal-section"><h4>Clinical Implication</h4><p>${a.ai_implication}</p></div>` : ''}
+      ${a.doi ? `<div style="padding-top:1.25rem;border-top:1px solid #f1f5f9;"><a href="https://doi.org/${a.doi}" target="_blank" rel="noopener" style="font-size:0.82rem;color:var(--color-teal);font-weight:600;">View original paper → doi:${a.doi}</a></div>` : ''}`;
+  } catch {
+    document.getElementById('modal-body').innerHTML = '<div style="padding:2rem;color:#e53e3e;font-size:0.9rem;">Failed to load article.</div>';
   }
 }
+function closeModal()    { document.getElementById('modal-overlay').classList.remove('open'); }
+function maybeCloseModal(e) { if (e.target === document.getElementById('modal-overlay')) closeModal(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function maybeClose(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-}
-
-// ── SUBSCRIBE ────────────────────────────────────────────────────────────────
-async function handleSub() {
-  const name      = document.getElementById('name-input').value.trim();
-  const email     = document.getElementById('email-input').value.trim();
-  const specialty = document.getElementById('spec-select').value;
-  const btn       = document.getElementById('subscribe-btn');
-  const errEl     = document.getElementById('error-msg');
-
-  if (!email || !email.includes('@')) {
-    document.getElementById('email-input').style.borderColor = 'var(--red)';
-    setTimeout(()=>{ document.getElementById('email-input').style.borderColor='var(--border)'; }, 2000);
-    return;
-  }
-
-  btn.textContent = 'Subscribing...';
-  btn.disabled    = true;
-  errEl.style.display = 'none';
-
-  try {
-    const res  = await fetch(`${API}/api/subscribe`, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ name, email, specialty })
-    });
-    const data = await res.json();
-
-    if (!res.ok) throw new Error(data.error || 'Subscribe failed');
-
-    document.getElementById('email-form').style.display  = 'none';
-    document.getElementById('success-msg').style.display = 'block';
-    loadStats(); // refresh subscriber count
-  } catch(e) {
-    btn.textContent = 'Subscribe — It\'s Free →';
-    btn.disabled    = false;
-    document.getElementById('error-text').textContent = e.message;
-    errEl.style.display = 'block';
-  }
-}
-
-// ── PREVIEW ──────────────────────────────────────────────────────────────────
-function renderPreview(articles) {
-  const d = new Date();
-  document.getElementById('preview-date').textContent =
-    d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}) +
-    ` · ${articles.length} articles`;
-
-  document.getElementById('preview-items').innerHTML = articles.slice(0,3).map(a => {
-    const label = SPECIALTY_LABELS[a.specialty] || a.specialty;
-    const plain = (a.ai_summary||'').replace(/<[^>]+>/g,'');
-    return `
-      <div class="preview-item">
-        <div class="preview-tag-label">${label}</div>
-        <p><strong>${a.title.split(':')[0]}</strong> — ${plain.substring(0,90)}...</p>
-      </div>`;
-  }).join('');
-}
-
-// ── TRENDING ─────────────────────────────────────────────────────────────────
-function renderTrending(articles) {
-  const high = articles.filter(a=>a.impact_level==='high').slice(0,5);
-  const list = high.length ? high : articles.slice(0,5);
-  document.getElementById('trending-list').innerHTML = list.map((a,i)=>`
-    <div class="trending-item" onclick="openModal('${a.id}')">
-      <div class="trending-num">0${i+1}</div>
-      <div class="trending-title">${a.title.split(':')[0]}</div>
-    </div>
-  `).join('');
-}
-
-// ── INIT ─────────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('today-date').textContent =
-    new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  loadArticles();
-  loadStats();
-  document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
-});
+/* ── Boot ── */
+document.addEventListener('DOMContentLoaded', () => loadArticles('all'));
 </script>
+
 </body>
 </html>
