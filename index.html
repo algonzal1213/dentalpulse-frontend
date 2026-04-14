@@ -889,8 +889,8 @@
         <div style="color:rgba(255,255,255,.45);font-size:0.84rem;margin-top:0.6rem;line-height:1.45;font-weight:500;">Dental<br/>specialties</div>
       </div>
       <div>
-        <div class="stat-num" style="font-size:3.75rem;">Daily<span style="color:var(--color-yellow);font-size:1.5rem;"> digest</span></div>
-        <div style="color:rgba(255,255,255,.45);font-size:0.84rem;margin-top:0.6rem;line-height:1.45;font-weight:500;">AI-summarised<br/>research</div>
+        <div class="stat-num" style="font-size:3.75rem;"><span id="stat-articles">—</span><span style="color:var(--color-yellow);font-size:2rem;">+</span></div>
+        <div style="color:rgba(255,255,255,.45);font-size:0.84rem;margin-top:0.6rem;line-height:1.45;font-weight:500;">Articles<br/>summarised</div>
       </div>
       <div>
         <div class="stat-num" style="font-size:3.75rem;">Free<span style="color:var(--color-orange);font-size:1.5rem;"> always</span></div>
@@ -960,6 +960,16 @@
       <button onclick="loadArticles(currentCat)" style="display:inline-flex;align-items:center;gap:0.4rem;background:none;border:1.5px solid #e2e8f0;border-radius:9999px;padding:0.45rem 1rem;font-size:0.78rem;font-weight:600;color:#64748b;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='var(--color-teal)';this.style.color='var(--color-teal)'" onmouseout="this.style.borderColor='#e2e8f0';this.style.color='#64748b'">
         ⟳ Refresh
       </button>
+    </div>
+
+    <!-- Search bar -->
+    <div style="position:relative;margin-bottom:1.25rem;">
+      <svg style="position:absolute;left:1rem;top:50%;transform:translateY(-50%);pointer-events:none;" width="16" height="16" fill="none" viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4.5" stroke="#9ca3af" stroke-width="1.5"/><path d="M10.5 10.5l3 3" stroke="#9ca3af" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input id="search-input" type="text" placeholder="Search articles by title, journal or keyword…"
+             style="width:100%;padding:0.8rem 1rem 0.8rem 2.75rem;border-radius:12px;border:1.5px solid #e2e8f0;background:#fff;font-size:0.9rem;font-family:var(--font-family-body);color:var(--color-navy);outline:none;transition:border-color .2s;"
+             onfocus="this.style.borderColor='var(--color-teal)'" onblur="this.style.borderColor='#e2e8f0'"
+             oninput="searchArticles(this.value)"/>
+      <button id="search-clear" onclick="clearSearch()" style="display:none;position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#9ca3af;font-size:1rem;line-height:1;">✕</button>
     </div>
 
     <!-- Specialty filter chips -->
@@ -1167,8 +1177,60 @@ function closeModal()    { document.getElementById('modal-overlay').classList.re
 function maybeCloseModal(e) { if (e.target === document.getElementById('modal-overlay')) closeModal(); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+/* ── Search ── */
+let currentQuery = '';
+
+function searchArticles(q) {
+  currentQuery = q.trim().toLowerCase();
+  const clear = document.getElementById('search-clear');
+  clear.style.display = currentQuery ? 'block' : 'none';
+  const filtered = currentQuery
+    ? allLoaded.filter(a =>
+        (a.title       || '').toLowerCase().includes(currentQuery) ||
+        (a.journal     || '').toLowerCase().includes(currentQuery) ||
+        (a.ai_summary  || '').toLowerCase().includes(currentQuery) ||
+        (a.specialty   || '').toLowerCase().includes(currentQuery))
+    : allLoaded;
+  renderArticles(filtered);
+  if (!currentQuery) renderTrending(allLoaded);
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  searchArticles('');
+}
+
+/* ── Stats counter ── */
+function animateCount(el, target) {
+  const duration = 1800;
+  const start = performance.now();
+  const from = 0;
+  function step(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(from + (target - from) * eased).toLocaleString();
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+async function loadStats() {
+  try {
+    const res  = await fetch(`${API}/api/stats`);
+    const data = await res.json();
+    const total = data.articles_total || data.total || 0;
+    if (total) {
+      const el = document.getElementById('stat-articles');
+      animateCount(el, total);
+    }
+  } catch { /* silently ignore if stats endpoint unavailable */ }
+}
+
 /* ── Boot ── */
-document.addEventListener('DOMContentLoaded', () => loadArticles('all'));
+document.addEventListener('DOMContentLoaded', () => {
+  loadArticles('all');
+  loadStats();
+});
 </script>
 
 </body>
