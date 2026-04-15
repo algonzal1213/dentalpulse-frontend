@@ -1296,7 +1296,7 @@ async function handleSubscribe(e) {
   success.style.display = 'none';
   error.style.display   = 'none';
   try {
-    const res = await fetch('/api/subscribe', {
+    const res = await fetch(`${API}/api/subscribe`, {
       method: 'POST', headers: {'Content-Type':'application/json'},
       body: JSON.stringify({email})
     });
