@@ -169,6 +169,91 @@
     @keyframes shimmer { 0%,100%{opacity:.6} 50%{opacity:1} }
     @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 
+    /* ── Dark mode ── */
+    html.dark body { background: #0d1117; color: #e6edf3; }
+
+    /* Sections with white/cream backgrounds */
+    html.dark section[style*="background:#fff"],
+    html.dark section[style*="background: #fff"],
+    html.dark section[style*="background:var(--color-white)"] {
+      background: #0d1117 !important;
+    }
+    html.dark section[style*="background:var(--color-cream)"],
+    html.dark section[style*="background: var(--color-cream)"] {
+      background: #161b22 !important;
+    }
+
+    /* Section text */
+    html.dark .section-sub { color: #94a3b8 !important; }
+    html.dark h2[style*="color:var(--color-navy)"],
+    html.dark h2[style*="color: var(--color-navy)"] { color: #e6edf3 !important; }
+
+    /* Value prop mini stat pills */
+    html.dark [style*="background:#fff2ea"] { background: #1f1309 !important; }
+    html.dark [style*="background:#e8f8ff"] { background: #031824 !important; }
+    html.dark [style*="background:#fffaed"] { background: #1a1600 !important; }
+
+    /* Floating chip */
+    html.dark [style*="background:var(--color-navy)"][style*="color:#fff"][style*="border-radius:11px"] {
+      background: #1c2433 !important;
+    }
+
+    /* Free digest section border */
+    html.dark section[style*="border-top:1px solid #e8eaed"] { border-top-color: #30363d !important; }
+
+    /* Article cards */
+    html.dark .article-card-row { background: #1c2433 !important; border-top-color: #30363d !important; }
+    html.dark .article-card-row:hover { background: #1e2d40 !important; }
+    html.dark .article-card-row h3 { color: #e6edf3 !important; }
+    html.dark .article-card-row .a-summary { color: #8b949e !important; }
+    html.dark .a-date { color: #6e7681 !important; }
+
+    /* Articles container */
+    html.dark #articles-list { background: #1c2433 !important; border-color: #30363d !important; }
+    html.dark [style*="background:#fff;border-radius:16px"] { background: #1c2433 !important; border-color: #30363d !important; }
+
+    /* Category chips */
+    html.dark .cat-chip { background: #161b22 !important; border-color: #30363d !important; color: #8b949e !important; }
+    html.dark .cat-chip:hover, html.dark .cat-chip.active { background: var(--color-teal) !important; color: #fff !important; border-color: var(--color-teal) !important; }
+
+    /* Search input */
+    html.dark #search-input { background: #1c2433 !important; border-color: #30363d !important; color: #e6edf3 !important; }
+
+    /* Trending sidebar */
+    html.dark #trending-list span[style*="color:var(--color-navy)"] { color: #e6edf3 !important; }
+
+    /* About section card */
+    html.dark [style*="background:#fff;border-radius:20px"] { background: #1c2433 !important; border-color: #30363d !important; }
+    html.dark [style*="color:#64748b"] { color: #8b949e !important; }
+    html.dark #email-input { background: #0d1117 !important; border-color: #30363d !important; color: #e6edf3 !important; }
+
+    /* Modal */
+    html.dark .modal-box { background: #161b22 !important; }
+    html.dark .modal-box h2 { color: #e6edf3 !important; }
+    html.dark .modal-meta { color: #8b949e !important; border-bottom-color: #30363d !important; }
+    html.dark .modal-section p, html.dark .modal-section li { color: #94a3b8 !important; }
+    html.dark .modal-close { color: #6e7681 !important; }
+    html.dark .modal-close:hover { color: #e6edf3 !important; }
+
+    /* Footer nav */
+    html.dark footer { border-top-color: rgba(255,255,255,.05) !important; }
+
+    /* Skeleton */
+    html.dark .skel { background: #30363d !important; }
+    html.dark .skeleton-row { border-top-color: #30363d !important; }
+
+    /* Theme toggle button */
+    #theme-toggle {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 9999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      cursor: pointer; color: #fff; font-size: 1rem;
+      transition: background 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+    }
+    #theme-toggle:hover { background: rgba(255,255,255,0.15); }
+
     /* ── Mobile nav ── */
     #nav-hamburger {
       display: none;
@@ -428,6 +513,9 @@
        onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
       Subscribe Free
     </a>
+
+    <!-- Theme toggle -->
+    <button id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">🌙</button>
 
     <!-- Hamburger (mobile only) -->
     <button id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Open menu">
@@ -1348,6 +1436,23 @@ async function loadStats() {
     }
   } catch { /* silently ignore if stats endpoint unavailable */ }
 }
+
+/* ── Theme toggle ── */
+function toggleTheme() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  document.getElementById('theme-toggle').textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('dp-theme', isDark ? 'dark' : 'light');
+}
+(function() {
+  const saved = localStorage.getItem('dp-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (saved === 'dark' || (!saved && prefersDark)) {
+    document.documentElement.classList.add('dark');
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('theme-toggle').textContent = '☀️';
+    });
+  }
+})();
 
 /* ── Mobile menu ── */
 function toggleMobileMenu() {
