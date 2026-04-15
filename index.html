@@ -169,6 +169,115 @@
     @keyframes shimmer { 0%,100%{opacity:.6} 50%{opacity:1} }
     @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 
+    /* ── Mobile nav ── */
+    #nav-hamburger {
+      display: none;
+      background: none; border: none; cursor: pointer;
+      flex-direction: column; gap: 5px; padding: 4px;
+    }
+    #nav-hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: #fff; border-radius: 2px;
+      transition: all 0.25s;
+    }
+    #mobile-nav {
+      display: none;
+      flex-direction: column;
+      background: var(--color-navy);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 1rem 1.5rem 1.5rem;
+      gap: 0.1rem;
+    }
+    #mobile-nav.open { display: flex; }
+    .mobile-nav-link {
+      font-size: 1rem; font-weight: 600;
+      color: rgba(255,255,255,0.75);
+      text-decoration: none; padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: color 0.2s;
+    }
+    .mobile-nav-link:last-child { border-bottom: none; }
+    .mobile-nav-link:hover { color: #fff; }
+    .mobile-nav-cta {
+      display: block; margin-top: 1rem;
+      background: var(--color-orange); color: #fff;
+      font-size: 0.95rem; font-weight: 700;
+      padding: 0.75rem; border-radius: 9999px;
+      text-align: center; text-decoration: none;
+    }
+
+    /* ── Responsive breakpoints ── */
+    @media (max-width: 900px) {
+      .specialties-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+
+    @media (max-width: 768px) {
+      /* Nav */
+      #nav-links, #nav-cta { display: none !important; }
+      #nav-hamburger { display: flex; }
+
+      /* Section padding */
+      section { padding-top: 3.5rem !important; padding-bottom: 3.5rem !important; }
+
+      /* Two-col grids → single col */
+      .two-col-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2.5rem !important;
+      }
+      /* Hide decorative SVG cube on mobile */
+      .two-col-grid .cube-col { display: none; }
+
+      /* Specialties */
+      .specialties-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+      /* Free digest */
+      .digest-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+      }
+      .digest-grid > div[style*="grid-column"] {
+        grid-column: span 1 !important;
+      }
+
+      /* Stats */
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 2rem !important;
+      }
+      .stat-num { font-size: 2.75rem !important; }
+
+      /* About */
+      .about-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2.5rem !important;
+      }
+
+      /* Research layout */
+      .research-layout {
+        grid-template-columns: 1fr !important;
+      }
+      .research-sidebar { display: none; }
+
+      /* Article meta: hide journal on small screens */
+      .a-journal { display: none; }
+
+      /* Modal */
+      .modal-overlay { padding: 0.75rem !important; align-items: flex-end !important; }
+      .modal-box {
+        padding: 1.5rem !important;
+        border-radius: 16px 16px 12px 12px !important;
+        max-height: 92vh !important;
+      }
+
+      /* Search bar */
+      #search-input { font-size: 0.85rem !important; }
+    }
+
+    @media (max-width: 480px) {
+      .specialties-grid { grid-template-columns: 1fr !important; }
+      .stats-grid { grid-template-columns: 1fr !important; }
+    }
+
     /* ── Stat number ── */
     .stat-num {
       font-family: var(--font-family-heading);
@@ -306,7 +415,7 @@
     </a>
 
     <!-- Nav links -->
-    <nav style="display:flex;align-items:center;gap:2rem;">
+    <nav id="nav-links" style="display:flex;align-items:center;gap:2rem;">
       <a href="#research" class="nav-link">Research</a>
       <a href="#newsletter" class="nav-link">Newsletter</a>
       <a href="#specialties" class="nav-link">Specialties</a>
@@ -314,13 +423,27 @@
     </nav>
 
     <!-- CTA -->
-    <a href="#about"
+    <a id="nav-cta" href="#about"
        style="background:var(--color-orange);color:#fff;font-size:0.875rem;font-weight:600;padding:0.5rem 1.3rem;border-radius:9999px;text-decoration:none;transition:opacity 0.2s;"
        onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
       Subscribe Free
     </a>
+
+    <!-- Hamburger (mobile only) -->
+    <button id="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<!-- Mobile nav dropdown -->
+<div id="mobile-nav">
+  <a href="#research"    class="mobile-nav-link" onclick="closeMobileMenu()">Research</a>
+  <a href="#specialties" class="mobile-nav-link" onclick="closeMobileMenu()">Specialties</a>
+  <a href="#newsletter"  class="mobile-nav-link" onclick="closeMobileMenu()">Newsletter</a>
+  <a href="#about"       class="mobile-nav-link" onclick="closeMobileMenu()">About</a>
+  <a href="#about"       class="mobile-nav-cta"  onclick="closeMobileMenu()">Subscribe Free</a>
+</div>
 
 
 <!-- ════════════════════════════════════
@@ -463,7 +586,7 @@
   4. VALUE PROP — Every Dental Breakthrough
 ════════════════════════════════════ -->
 <section id="research" style="background:#fff;padding:6rem 0;">
-  <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;">
+  <div class="two-col-grid" style="max-width:1200px;margin:0 auto;padding:0 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;">
 
     <!-- Left -->
     <div>
@@ -499,7 +622,7 @@
     </div>
 
     <!-- Right: isometric cubes -->
-    <div style="display:flex;align-items:center;justify-content:center;position:relative;">
+    <div class="cube-col" style="display:flex;align-items:center;justify-content:center;position:relative;">
       <svg viewBox="0 0 480 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;">
         <!-- bg circle -->
         <circle cx="240" cy="230" r="185" fill="#f0f9ff"/>
@@ -576,7 +699,7 @@
     </div>
 
     <!-- 4×2 Cards grid -->
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;">
+    <div class="specialties-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;">
 
       <!-- Orthodontics -->
       <div class="specialty-card">
@@ -783,7 +906,7 @@
 ════════════════════════════════════ -->
 <section style="background:#fff;padding:5rem 0;border-top:1px solid #e8eaed;">
   <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;">
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1.5rem;align-items:start;">
+    <div class="digest-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1.5rem;align-items:start;">
 
       <div style="grid-column:span 2;">
         <p style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--color-orange);margin-bottom:1rem;">Free Daily Digest</p>
@@ -878,7 +1001,7 @@
   <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;position:relative;z-index:1;">
 
     <!-- Stats grid -->
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2.5rem;">
+    <div class="stats-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:2.5rem;">
 
       <div>
         <div class="stat-num" style="font-size:3.75rem;">147<span style="color:var(--color-orange);">+</span></div>
@@ -906,7 +1029,7 @@
   7. ABOUT SECTION
 ════════════════════════════════════ -->
 <section id="about" style="background:var(--color-cream);padding:6rem 0;border-top:1px solid #e8eaed;">
-  <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;">
+  <div class="about-grid" style="max-width:1200px;margin:0 auto;padding:0 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;">
 
     <!-- Left: heading + about copy -->
     <div>
@@ -986,7 +1109,7 @@
     </div>
 
     <!-- Main grid: articles list + sidebar -->
-    <div style="display:grid;grid-template-columns:1fr 300px;gap:2rem;align-items:start;">
+    <div class="research-layout" style="display:grid;grid-template-columns:1fr 300px;gap:2rem;align-items:start;">
 
       <!-- Articles list -->
       <div style="background:#fff;border-radius:16px;overflow:hidden;border:1px solid #e8eaed;">
@@ -999,7 +1122,7 @@
       </div>
 
       <!-- Sidebar -->
-      <div style="display:flex;flex-direction:column;gap:1.5rem;">
+      <div class="research-sidebar" style="display:flex;flex-direction:column;gap:1.5rem;">
         <!-- Trending box -->
         <div style="background:#fff;border-radius:16px;padding:1.5rem;border:1px solid #e8eaed;">
           <h3 style="font-family:var(--font-family-heading);font-weight:700;font-size:0.9rem;color:var(--color-navy);margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem;">
@@ -1224,6 +1347,15 @@ async function loadStats() {
       animateCount(el, total);
     }
   } catch { /* silently ignore if stats endpoint unavailable */ }
+}
+
+/* ── Mobile menu ── */
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobile-nav');
+  menu.classList.toggle('open');
+}
+function closeMobileMenu() {
+  document.getElementById('mobile-nav').classList.remove('open');
 }
 
 /* ── Boot ── */
