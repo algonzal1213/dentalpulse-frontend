@@ -169,6 +169,24 @@
     @keyframes shimmer { 0%,100%{opacity:.6} 50%{opacity:1} }
     @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 
+    /* ── Specialty selector chips ── */
+    .spec-chip {
+      display: flex; align-items: center; gap: 0.45rem;
+      padding: 0.45rem 0.75rem; border-radius: 8px;
+      font-size: 0.78rem; font-weight: 600; cursor: pointer;
+      border: 1.5px solid #e2e8f0; color: #64748b;
+      background: #fff; transition: all 0.15s; user-select: none;
+    }
+    .spec-chip.active {
+      border-color: var(--color-navy); color: var(--color-navy);
+      background: rgba(10,22,40,0.05);
+    }
+    .spec-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    html.dark .spec-chip { background: #161b22 !important; border-color: #30363d !important; color: #8b949e !important; }
+    html.dark .spec-chip.active { border-color: var(--color-teal) !important; color: #e6edf3 !important; background: rgba(0,180,216,0.08) !important; }
+
     /* ── Dark mode ── */
     /* Redefine --color-navy to light so all inline color:var(--color-navy) text becomes readable.
        Elements needing a dark navy background get it re-locked via !important below. */
@@ -1154,11 +1172,46 @@
     <!-- Right: subscribe form -->
     <div style="background:#fff;border-radius:20px;padding:2.5rem;border:1px solid #e8eaed;">
       <p style="font-family:var(--font-family-heading);font-weight:700;font-size:1.1rem;color:var(--color-navy);margin-bottom:0.5rem;">Free daily digest</p>
-      <p style="font-size:0.9rem;color:#64748b;line-height:1.6;margin-bottom:1.75rem;">Get AI-summarised dental research delivered every morning before rounds. Curated by specialty, clinically relevant, always free.</p>
+      <p style="font-size:0.9rem;color:#64748b;line-height:1.6;margin-bottom:1.25rem;">Get AI-summarised dental research delivered every morning before rounds. Curated by specialty, clinically relevant, always free.</p>
       <form id="subscribe-form" style="display:flex;flex-direction:column;gap:0.85rem;" onsubmit="handleSubscribe(event)">
         <input type="email" id="email-input" placeholder="your@email.com" required
                style="width:100%;padding:0.9rem 1.3rem;border-radius:12px;border:1.5px solid #d0d5dd;background:var(--color-cream);color:var(--color-navy);font-size:0.95rem;outline:none;transition:border-color .2s;font-family:var(--font-family-body);"
                onfocus="this.style.borderColor='var(--color-teal)'" onblur="this.style.borderColor='#d0d5dd'"/>
+
+        <!-- Specialty selection -->
+        <div>
+          <p style="font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-navy);margin-bottom:0.6rem;opacity:0.6;">Receive summaries for:</p>
+          <div id="specialty-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;">
+            <label class="spec-chip active" data-val="all" onclick="toggleSpecialty(this)">
+              <span class="spec-dot" style="background:var(--color-orange);"></span>All Specialties
+            </label>
+            <label class="spec-chip" data-val="orthodontics" onclick="toggleSpecialty(this)">
+              <span class="spec-dot" style="background:#7c3aed;"></span>Orthodontics
+            </label>
+            <label class="spec-chip" data-val="periodontics" onclick="toggleSpecialty(this)">
+              <span class="spec-dot" style="background:#00b496;"></span>Periodontics
+            </label>
+            <label class="spec-chip" data-val="endodontics" onclick="toggleSpecialty(this)">
+              <span class="spec-dot" style="background:#b8860b;"></span>Endodontics
+            </label>
+            <label class="spec-chip" data-val="oral_surgery" onclick="toggleSpecialty(this)">
+              <span class="spec-dot" style="background:#e53e3e;"></span>Oral Surgery
+            </label>
+            <label class="spec-chip" data-val="restorative" onclick="toggleSpecialty(this)">
+              <span class="spec-dot" style="background:#0284c7;"></span>Restorative
+            </label>
+            <label class="spec-chip" data-val="implantology" onclick="toggleSpecialty(this)">
+              <span class="spec-dot" style="background:#c05621;"></span>Implantology
+            </label>
+            <label class="spec-chip" data-val="pediatric" onclick="toggleSpecialty(this)">
+              <span class="spec-dot" style="background:#be185d;"></span>Pediatric
+            </label>
+            <label class="spec-chip" data-val="oral_medicine" onclick="toggleSpecialty(this)">
+              <span class="spec-dot" style="background:#4338ca;"></span>Oral Medicine
+            </label>
+          </div>
+        </div>
+
         <button type="submit"
                 style="display:flex;align-items:center;justify-content:center;gap:0.5rem;background:var(--color-orange);color:#fff;font-size:0.95rem;font-weight:700;padding:0.9rem 2rem;border-radius:9999px;border:none;cursor:pointer;transition:opacity .2s;width:100%;font-family:var(--font-family-heading);"
                 onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
@@ -1287,18 +1340,51 @@
 </footer>
 
 <script>
+/* ── Specialty selector ── */
+function toggleSpecialty(chip) {
+  const val = chip.dataset.val;
+  const allChip = document.querySelector('.spec-chip[data-val="all"]');
+  const otherChips = document.querySelectorAll('.spec-chip:not([data-val="all"])');
+
+  if (val === 'all') {
+    // "All" selected — deactivate individual chips
+    allChip.classList.add('active');
+    otherChips.forEach(c => c.classList.remove('active'));
+  } else {
+    // Individual chip toggled
+    chip.classList.toggle('active');
+    // If any individual chip is active, deactivate "All"
+    const anyActive = [...otherChips].some(c => c.classList.contains('active'));
+    if (anyActive) {
+      allChip.classList.remove('active');
+    } else {
+      // Nothing selected — fall back to "All"
+      allChip.classList.add('active');
+    }
+  }
+}
+
+function getSelectedSpecialties() {
+  const allChip = document.querySelector('.spec-chip[data-val="all"]');
+  if (allChip.classList.contains('active')) return 'all';
+  const selected = [...document.querySelectorAll('.spec-chip:not([data-val="all"]).active')]
+    .map(c => c.dataset.val);
+  return selected.length ? selected.join(',') : 'all';
+}
+
 /* ── Subscribe ── */
 async function handleSubscribe(e) {
   e.preventDefault();
-  const email = document.getElementById('email-input').value;
-  const success = document.getElementById('subscribe-success');
-  const error   = document.getElementById('subscribe-error');
+  const email     = document.getElementById('email-input').value;
+  const specialty = getSelectedSpecialties();
+  const success   = document.getElementById('subscribe-success');
+  const error     = document.getElementById('subscribe-error');
   success.style.display = 'none';
   error.style.display   = 'none';
   try {
     const res = await fetch(`${API}/api/subscribe`, {
       method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({email})
+      body: JSON.stringify({ email, specialty })
     });
     if (res.ok) { success.style.display = 'block'; document.getElementById('subscribe-form').reset(); }
     else          error.style.display = 'block';
