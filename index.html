@@ -168,6 +168,7 @@
     .skel { background: #f1f5f9; border-radius: 4px; animation: shimmer 1.4s ease infinite; }
     @keyframes shimmer { 0%,100%{opacity:.6} 50%{opacity:1} }
     @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
     /* ── Specialty selector chips ── */
     .spec-chip {
@@ -1402,8 +1403,23 @@ const SPECIALTY_LABELS = {
   pediatric:'Pediatric',       oral_medicine:'Oral Medicine'
 };
 
+function showArticleSkeletons() {
+  const el = document.getElementById('articles-list');
+  el.innerHTML = Array.from({length: 5}).map(() => `
+    <div style="padding:1.4rem 1.75rem;border-bottom:1px solid #f1f5f9;animation:pulse 1.4s ease-in-out infinite;">
+      <div style="display:flex;gap:0.5rem;margin-bottom:0.7rem;">
+        <div style="height:18px;width:80px;border-radius:4px;background:#e2e8f0;"></div>
+        <div style="height:18px;width:60px;border-radius:4px;background:#e2e8f0;"></div>
+      </div>
+      <div style="height:20px;width:85%;border-radius:4px;background:#e2e8f0;margin-bottom:0.5rem;"></div>
+      <div style="height:14px;width:95%;border-radius:4px;background:#f1f5f9;margin-bottom:0.3rem;"></div>
+      <div style="height:14px;width:75%;border-radius:4px;background:#f1f5f9;"></div>
+    </div>`).join('');
+}
+
 async function loadArticles(cat) {
   currentCat = cat;
+  showArticleSkeletons();
   const url = cat === 'all'
     ? `${API}/api/articles?limit=20`
     : `${API}/api/articles?specialty=${cat}&limit=20`;
@@ -1572,6 +1588,8 @@ function closeMobileMenu() {
 
 /* ── Boot ── */
 document.addEventListener('DOMContentLoaded', () => {
+  // Ping backend immediately to wake Render from sleep before article fetch
+  fetch(`${API}/health`).catch(() => {});
   loadArticles('all');
   loadStats();
 });
