@@ -214,6 +214,10 @@
     /* Re-lock dark navy backgrounds that must stay dark */
     html.dark header                               { background: #0A1628 !important; }
     html.dark footer                               { background: #0A1628 !important; }
+    html.dark #contact                             { background: #0d1f35 !important; border-color: #1e2d3d !important; }
+    html.dark #contact h2                          { color: #e6edf3 !important; }
+    html.dark #contact p                           { color: #94a3b8 !important; }
+    html.dark #contact a[href^="mailto"]           { background: #1e3a5f !important; }
     html.dark #mobile-nav                          { background: #0A1628 !important; }
     html.dark section[style*="background:var(--color-navy)"] { background: #0A1628 !important; }
     /* Sidebar subscribe nudge box */
@@ -1331,6 +1335,34 @@
 </div>
 
 <!-- ════════════════════════════════════
+  CONTACT
+════════════════════════════════════ -->
+<section id="contact" style="background:#f8fafc;padding:5rem 0;border-top:1px solid #e8eaed;">
+  <div style="max-width:640px;margin:0 auto;padding:0 1.5rem;text-align:center;">
+
+    <div style="display:inline-block;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--color-teal);background:rgba(0,180,216,0.08);padding:4px 14px;border-radius:9999px;margin-bottom:1.25rem;">Get In Touch</div>
+
+    <h2 style="font-family:var(--font-family-heading);font-size:2.2rem;font-weight:800;color:var(--color-navy);letter-spacing:-0.02em;margin-bottom:1rem;line-height:1.15;">Have a question or feedback?</h2>
+
+    <p style="font-size:1rem;color:#64748b;line-height:1.7;margin-bottom:2rem;">
+      Whether you have a suggestion, a question about DentalPulse, or want to get involved — we'd love to hear from you.
+    </p>
+
+    <a href="mailto:contact@dentalpulse.io" style="
+      display:inline-flex;align-items:center;gap:0.6rem;
+      background:var(--color-navy);color:#fff;
+      font-family:var(--font-family-heading);font-size:1rem;font-weight:700;
+      text-decoration:none;padding:0.85rem 2rem;border-radius:9999px;
+      transition:opacity .2s;
+    " onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      contact@dentalpulse.io
+    </a>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
   FOOTER
 ════════════════════════════════════ -->
 <footer style="background:var(--color-navy);padding:2.75rem 0;border-top:1px solid rgba(255,255,255,.07);">
@@ -1342,15 +1374,16 @@
     </div>
 
     <nav style="display:flex;align-items:center;gap:2rem;flex-wrap:wrap;">
-      <a href="#about"      style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">About</a>
+      <a href="#about"       style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">About</a>
       <a href="#specialties" style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">Specialties</a>
-      <a href="#about"  style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">Newsletter</a>
-      <a href="#"           style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">Privacy</a>
-      <a href="#"           style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">Unsubscribe</a>
-      <a href="#"           style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">Contact</a>
+      <a href="#about"       style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">Newsletter</a>
+      <a href="#contact"     style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">Contact</a>
     </nav>
 
-    <p style="color:rgba(255,255,255,.22);font-size:0.74rem;">© 2026 DentalPulse · AI-powered research digest for dental professionals</p>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem;">
+      <a href="mailto:contact@dentalpulse.io" style="color:rgba(255,255,255,.42);font-size:0.78rem;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.42)'">contact@dentalpulse.io</a>
+      <p style="color:rgba(255,255,255,.22);font-size:0.74rem;margin:0;">© 2026 DentalPulse · AI-powered research digest for dental professionals</p>
+    </div>
 
   </div>
 </footer>
