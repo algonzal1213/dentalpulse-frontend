@@ -1607,7 +1607,34 @@ document.addEventListener('DOMContentLoaded', () => {
   fetch(`${API}/health`).catch(() => {});
   loadArticles('all');
   loadStats();
+
+  // Handle unsubscribe redirect from email link
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('unsub') === 'success') {
+    showUnsubBanner('You have been unsubscribed. You will no longer receive DentalPulse emails.', false);
+    window.history.replaceState({}, '', window.location.pathname);
+  } else if (params.get('unsub') === 'error') {
+    showUnsubBanner('Something went wrong. Please try again or contact support.', true);
+    window.history.replaceState({}, '', window.location.pathname);
+  }
 });
+
+function showUnsubBanner(message, isError) {
+  const banner = document.createElement('div');
+  banner.style.cssText = `
+    position:fixed;top:0;left:0;right:0;z-index:9999;
+    padding:14px 24px;text-align:center;
+    background:${isError ? '#7f1d1d' : '#0A1628'};
+    border-bottom:2px solid ${isError ? '#f87171' : '#00B4D8'};
+    color:${isError ? '#fca5a5' : '#e6edf3'};
+    font-family:Arial,sans-serif;font-size:14px;
+    display:flex;align-items:center;justify-content:center;gap:12px;
+  `;
+  banner.innerHTML = `<span>${isError ? '⚠' : '✓'} ${message}</span>
+    <button onclick="this.parentElement.remove()" style="background:none;border:none;color:inherit;font-size:18px;cursor:pointer;line-height:1;">×</button>`;
+  document.body.prepend(banner);
+  setTimeout(() => banner.remove(), 8000);
+}
 </script>
 
 </body>
