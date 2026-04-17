@@ -293,9 +293,11 @@
     html.dark .modal-close                        { color: #6e7681 !important; }
     html.dark .modal-close:hover                  { color: #e6edf3 !important; }
 
-    /* Skeleton */
+    /* Skeleton + wake message */
     html.dark .skel                               { background: #30363d !important; }
     html.dark .skeleton-row                       { border-top-color: #30363d !important; }
+    html.dark #articles-list [style*="color:#64748b"] { color: #8b949e !important; }
+    html.dark #articles-list [style*="color:#9ca3af"] { color: #6e7681 !important; }
 
     /* Impact badges */
     html.dark .impact-high     { background: rgba(0,180,150,0.15) !important; }
@@ -355,10 +357,17 @@
       .specialties-grid { grid-template-columns: repeat(2, 1fr) !important; }
     }
 
+    /* Hide scrollbar on filter chips row */
+    #cat-chips::-webkit-scrollbar { display: none; }
+    #cat-chips { -ms-overflow-style: none; scrollbar-width: none; }
+
     @media (max-width: 768px) {
       /* Nav */
       #nav-links, #nav-cta { display: none !important; }
       #nav-hamburger { display: flex; }
+
+      /* Filter chips: single row with horizontal scroll */
+      #cat-chips { flex-wrap: nowrap !important; }
 
       /* Section padding */
       section { padding-top: 3.5rem !important; padding-bottom: 3.5rem !important; }
@@ -1278,7 +1287,7 @@
     </div>
 
     <!-- Specialty filter chips -->
-    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2rem;" id="cat-chips">
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2rem;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;" id="cat-chips">
       <div class="cat-chip active" onclick="filterCat('all',this)">All Specialties</div>
       <div class="cat-chip" onclick="filterCat('orthodontics',this)">Orthodontics</div>
       <div class="cat-chip" onclick="filterCat('periodontics',this)">Periodontics</div>
@@ -1636,12 +1645,40 @@ function closeMobileMenu() {
   document.getElementById('mobile-nav').classList.remove('open');
 }
 
-/* ── Boot ── */
+/* ── Boot — wake Render before fetching articles ── */
+async function wakeAndLoad() {
+  const MAX_ATTEMPTS = 10;
+  const RETRY_MS = 5000;
+  let warningShown = false;
+
+  for (let i = 0; i < MAX_ATTEMPTS; i++) {
+    try {
+      const res = await fetch(`${API}/health`, { signal: AbortSignal.timeout(9000) });
+      if (res.ok) {
+        loadArticles('all');
+        loadStats();
+        return;
+      }
+    } catch {}
+
+    if (!warningShown) {
+      warningShown = true;
+      document.getElementById('articles-list').innerHTML = `
+        <div style="padding:2.5rem 1.75rem;text-align:center;">
+          <div style="font-size:0.9rem;color:#64748b;margin-bottom:0.4rem;">Waking up backend…</div>
+          <div style="font-size:0.78rem;color:#9ca3af;">First load can take up to 60 seconds. Hang tight.</div>
+        </div>`;
+    }
+    await new Promise(r => setTimeout(r, RETRY_MS));
+  }
+
+  // Give up — show error
+  document.getElementById('articles-list').innerHTML =
+    '<div style="padding:2rem 1.75rem;font-size:0.85rem;color:#9ca3af;text-align:center;">Backend is taking longer than usual. Please refresh the page.</div>';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Ping backend immediately to wake Render from sleep before article fetch
-  fetch(`${API}/health`).catch(() => {});
-  loadArticles('all');
-  loadStats();
+  wakeAndLoad();
 
   // Handle unsubscribe redirect from email link
   const params = new URLSearchParams(window.location.search);
