@@ -1510,7 +1510,8 @@ function renderArticles(list) {
     const label    = SPECIALTY_LABELS[a.specialty] || a.specialty || '';
     const tagClass = `a-tag a-tag-${a.specialty}`;
     const impact   = a.impact_level || 'moderate';
-    const date     = a.published_date ? new Date(a.published_date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+    // PubMed pub dates are month-precision only (stored YYYY-MM-01) — show month + year
+    const date     = a.pub_date ? new Date(a.pub_date).toLocaleDateString('en-GB',{month:'short',year:'numeric',timeZone:'UTC'}) : '';
     return `
     <div class="article-card-row" onclick="openModal('${a.id}')" style="animation:fadeUp 0.4s ${i*0.06}s ease both;opacity:0;">
       <div class="a-meta">
@@ -1547,7 +1548,8 @@ async function openModal(id) {
     const label    = SPECIALTY_LABELS[a.specialty] || a.specialty || '';
     const tagClass = `a-tag a-tag-${a.specialty}`;
     const impact   = a.impact_level || 'moderate';
-    const date     = a.published_date ? new Date(a.published_date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '';
+    // PubMed pub dates are month-precision only (stored YYYY-MM-01) — show month + year
+    const date     = a.pub_date ? new Date(a.pub_date).toLocaleDateString('en-GB',{month:'short',year:'numeric',timeZone:'UTC'}) : '';
     const findings = (a.ai_findings||[]).map(f=>`<li>${f}</li>`).join('');
     document.getElementById('modal-body').innerHTML = `
       ${label ? `<div style="margin-bottom:0.75rem"><span class="${tagClass}">${label}</span></div>` : ''}
