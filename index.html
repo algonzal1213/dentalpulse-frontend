@@ -1687,8 +1687,17 @@ async function wakeAndLoad() {
 document.addEventListener('DOMContentLoaded', () => {
   wakeAndLoad();
 
-  // Handle unsubscribe redirect from email link
+  // Silently log share events from email (share button passes ?share=subId&sd=date)
   const params = new URLSearchParams(window.location.search);
+  const shareId = params.get('share');
+  const shareDt = params.get('sd');
+  if (shareId && shareDt) {
+    fetch(`${API}/track/share/${encodeURIComponent(shareId)}/${encodeURIComponent(shareDt)}`)
+      .catch(() => {});
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+
+  // Handle unsubscribe redirect from email link
   if (params.get('unsub') === 'success') {
     showUnsubBanner('You have been unsubscribed. You will no longer receive DentalPulse emails.', false);
     window.history.replaceState({}, '', window.location.pathname);

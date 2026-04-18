@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unsubscribe — DentalPulse</title>
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #060d18;
+      color: #e6edf3;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .card {
+      background: #0d1117;
+      border: 1px solid #1e2d3d;
+      border-radius: 16px;
+      padding: 3rem 2.5rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 2rem;
+      text-decoration: none;
+    }
+    .logo-dot {
+      width: 18px;
+      height: 18px;
+      background: #FA4E03;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .logo-text {
+      font-family: 'Bricolage Grotesque', Arial, sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+    .icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    h1 {
+      font-family: 'Bricolage Grotesque', Arial, sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+    p {
+      font-size: 0.9rem;
+      color: #8b949e;
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+    .btn {
+      display: inline-block;
+      background: #FA4E03;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-ghost {
+      background: transparent;
+      color: #6e7681;
+      border: 1px solid #30363d;
+      font-size: 0.8rem;
+    }
+    .spinner {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(0,180,216,0.2);
+      border-top-color: #00B4D8;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .state { display: none; }
+    .state.active { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <a href="/" class="logo">
+    <div class="logo-dot"></div>
+    <span class="logo-text">DentalPulse</span>
+  </a>
+
+  <!-- Loading state -->
+  <div class="state active" id="state-loading">
+    <div class="spinner"></div>
+    <h1>Unsubscribing…</h1>
+    <p>Removing you from the list. This takes just a moment.</p>
+  </div>
+
+  <!-- Success state -->
+  <div class="state" id="state-success">
+    <span class="icon">✓</span>
+    <h1>You're unsubscribed</h1>
+    <p>You won't receive any more DentalPulse emails. If you change your mind, you can always re-subscribe on the website.</p>
+    <a href="/" class="btn">Back to DentalPulse</a>
+  </div>
+
+  <!-- Error state -->
+  <div class="state" id="state-error">
+    <span class="icon" style="color:#f87171;">⚠</span>
+    <h1>Something went wrong</h1>
+    <p id="error-msg">We couldn't process your unsubscribe request. Please try again or contact us at <a href="mailto:contact@dentalpulse.io" style="color:#00B4D8;">contact@dentalpulse.io</a>.</p>
+    <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-top:0.5rem;">
+      <button onclick="tryUnsubscribe()" class="btn">Try again</button>
+      <a href="/" class="btn btn-ghost">Go home</a>
+    </div>
+  </div>
+
+  <!-- Already done state -->
+  <div class="state" id="state-done">
+    <span class="icon">✓</span>
+    <h1>Already unsubscribed</h1>
+    <p>This unsubscribe link has already been used. You're not on the list.</p>
+    <a href="/" class="btn">Back to DentalPulse</a>
+  </div>
+</div>
+
+<script>
+const API = 'https://dentalpulse-backend.onrender.com';
+const token = new URLSearchParams(window.location.search).get('token');
+
+function show(id) {
+  document.querySelectorAll('.state').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+async function tryUnsubscribe() {
+  if (!token) {
+    show('state-error');
+    document.getElementById('error-msg').textContent = 'No unsubscribe token found in the link. Please contact contact@dentalpulse.io.';
+    return;
+  }
+
+  show('state-loading');
+
+  // Retry up to 8 times (handles Render cold start — up to ~60s)
+  for (let attempt = 0; attempt < 8; attempt++) {
+    try {
+      const res = await fetch(`${API}/unsubscribe?token=${encodeURIComponent(token)}`, {
+        signal: AbortSignal.timeout(12000),
+      });
+      if (res.ok || res.redirected) {
+        show('state-success');
+        return;
+      }
+      // 4xx = token invalid or already unsubscribed
+      if (res.status >= 400 && res.status < 500) {
+        show('state-done');
+        return;
+      }
+    } catch (e) {
+      // Timeout or network error — retry
+    }
+    if (attempt < 7) await new Promise(r => setTimeout(r, 6000));
+  }
+
+  show('state-error');
+}
+
+// The backend /unsubscribe route redirects — we need to handle it as a plain fetch.
+// Override to POST to a dedicated API endpoint instead.
+async function doUnsubscribe() {
+  if (!token) {
+    show('state-error');
+    document.getElementById('error-msg').textContent = 'No unsubscribe token found in the link. Please contact contact@dentalpulse.io.';
+    return;
+  }
+
+  show('state-loading');
+
+  for (let attempt = 0; attempt < 8; attempt++) {
+    try {
+      const res = await fetch(`${API}/api/unsubscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token }),
+        signal: AbortSignal.timeout(12000),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        show('state-success');
+        return;
+      }
+      if (res.status === 404) {
+        show('state-done');
+        return;
+      }
+    } catch (e) {
+      // Timeout or network error — retry after delay
+    }
+    if (attempt < 7) await new Promise(r => setTimeout(r, 6000));
+  }
+
+  show('state-error');
+}
+
+// Boot
+doUnsubscribe();
+</script>
+
+</body>
+</html>
