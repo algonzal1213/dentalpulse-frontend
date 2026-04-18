@@ -284,9 +284,10 @@
     html.dark #search-input { background: #161b22 !important; border-color: #30363d !important; color: #e6edf3 !important; }
     html.dark #search-input::placeholder { color: #6e7681 !important; }
 
-    /* Subscribe email input */
-    html.dark #email-input { background: #0d1117 !important; border-color: #30363d !important; color: #e6edf3 !important; }
-    html.dark #email-input::placeholder { color: #6e7681 !important; }
+    /* Subscribe form inputs */
+    html.dark #email-input, html.dark #name-input, html.dark #role-input { background: #0d1117 !important; border-color: #30363d !important; color: #e6edf3 !important; }
+    html.dark #email-input::placeholder, html.dark #name-input::placeholder { color: #6e7681 !important; }
+    html.dark #role-input option { background: #0d1117; color: #e6edf3; }
 
     /* Trending list article titles */
     html.dark #trending-list span { color: #c9d1d9 !important; }
@@ -1208,6 +1209,22 @@
       <p style="font-family:var(--font-family-heading);font-weight:700;font-size:1.1rem;color:var(--color-navy);margin-bottom:0.5rem;">Free daily digest</p>
       <p style="font-size:0.9rem;color:#64748b;line-height:1.6;margin-bottom:1.25rem;">Get AI-summarised dental research delivered every morning before rounds. Curated by specialty, clinically relevant, always free.</p>
       <form id="subscribe-form" style="display:flex;flex-direction:column;gap:0.85rem;" onsubmit="handleSubscribe(event)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;">
+          <input type="text" id="name-input" placeholder="Your name (optional)"
+                 style="width:100%;padding:0.9rem 1.3rem;border-radius:12px;border:1.5px solid #d0d5dd;background:var(--color-cream);color:var(--color-navy);font-size:0.95rem;outline:none;transition:border-color .2s;font-family:var(--font-family-body);box-sizing:border-box;"
+                 onfocus="this.style.borderColor='var(--color-teal)'" onblur="this.style.borderColor='#d0d5dd'"/>
+          <select id="role-input"
+                  style="width:100%;padding:0.9rem 1.3rem;border-radius:12px;border:1.5px solid #d0d5dd;background:var(--color-cream);color:var(--color-navy);font-size:0.95rem;outline:none;transition:border-color .2s;font-family:var(--font-family-body);appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239ca3af' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem;cursor:pointer;box-sizing:border-box;"
+                  onfocus="this.style.borderColor='var(--color-teal)'" onblur="this.style.borderColor='#d0d5dd'">
+            <option value="">I am a… (optional)</option>
+            <option value="dental_associate">Dental Associate</option>
+            <option value="dental_student">Dental Student</option>
+            <option value="dental_practice_owner">Practice Owner</option>
+            <option value="dental_hygienist">Dental Hygienist</option>
+            <option value="dental_educator">Dental Educator</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
         <input type="email" id="email-input" placeholder="your@email.com" required
                style="width:100%;padding:0.9rem 1.3rem;border-radius:12px;border:1.5px solid #d0d5dd;background:var(--color-cream);color:var(--color-navy);font-size:0.95rem;outline:none;transition:border-color .2s;font-family:var(--font-family-body);"
                onfocus="this.style.borderColor='var(--color-teal)'" onblur="this.style.borderColor='#d0d5dd'"/>
@@ -1445,6 +1462,8 @@ function getSelectedSpecialties() {
 async function handleSubscribe(e) {
   e.preventDefault();
   const email     = document.getElementById('email-input').value;
+  const name      = document.getElementById('name-input').value.trim() || null;
+  const role      = document.getElementById('role-input').value || null;
   const specialty = getSelectedSpecialties();
   const success   = document.getElementById('subscribe-success');
   const error     = document.getElementById('subscribe-error');
@@ -1453,7 +1472,7 @@ async function handleSubscribe(e) {
   try {
     const res = await fetch(`${API}/api/subscribe`, {
       method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ email, specialty })
+      body: JSON.stringify({ email, name, role, specialty })
     });
     if (res.ok) { success.style.display = 'block'; document.getElementById('subscribe-form').reset(); }
     else          error.style.display = 'block';
