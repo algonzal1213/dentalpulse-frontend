@@ -228,12 +228,9 @@
     /* Sidebar subscribe nudge box */
     html.dark [style*="background:var(--color-navy)"][style*="border-radius:16px"] { background: #0A1628 !important; }
     /* All navy-background elements: re-lock to dark so remapped --color-navy (#e6edf3) doesn't bleach them */
-    html.dark a[style*="background:var(--color-navy)"]      { background: #1c2433 !important; color: #e6edf3 !important; opacity: 1 !important; }
-    html.dark button[style*="background:var(--color-navy)"] { background: #1c2433 !important; color: #e6edf3 !important; opacity: 1 !important; }
-    html.dark div[style*="background:var(--color-navy)"]    { background: #1c2433 !important; color: #e6edf3 !important; opacity: 1 !important; }
-    /* Hover: use background shift instead of opacity (opacity creates see-through effect on dark bg) */
-    html.dark a[style*="background:var(--color-navy)"]:hover      { background: #2d3f57 !important; opacity: 1 !important; }
-    html.dark button[style*="background:var(--color-navy)"]:hover { background: #2d3f57 !important; opacity: 1 !important; }
+    html.dark a[style*="background:var(--color-navy)"]      { background: #1c2433 !important; color: #e6edf3 !important; }
+    html.dark button[style*="background:var(--color-navy)"] { background: #1c2433 !important; color: #e6edf3 !important; }
+    html.dark div[style*="background:var(--color-navy)"]    { background: #1c2433 !important; color: #e6edf3 !important; }
 
     /* Section backgrounds */
     html.dark section[style*="background:#fff"]          { background: #0d1117 !important; }
@@ -1059,8 +1056,9 @@
     <!-- CTA below cards -->
     <div style="text-align:center;margin-top:3rem;">
       <a href="#about"
-         style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--color-navy);color:#fff;font-size:0.875rem;font-weight:600;text-decoration:none;padding:0.75rem 1.75rem;border-radius:9999px;transition:opacity 0.2s;"
-         onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+         style="display:inline-flex;align-items:center;gap:0.5rem;background:var(--color-navy);color:#fff;font-size:0.875rem;font-weight:600;text-decoration:none;padding:0.75rem 1.75rem;border-radius:9999px;transition:background 0.2s;"
+         onmouseover="var dk=document.documentElement.classList.contains('dark');this.style.background=dk?'#2d3f57':'#0d1e38';this.style.color=dk?'#e6edf3':'#fff';"
+         onmouseout="this.style.background='';this.style.color='';">
         Subscribe for daily research across all 8 specialties
         <svg width="14" height="14" fill="none" viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
