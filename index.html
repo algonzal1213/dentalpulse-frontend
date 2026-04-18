@@ -227,8 +227,10 @@
     html.dark section[style*="background:var(--color-navy)"] { background: #0A1628 !important; }
     /* Sidebar subscribe nudge box */
     html.dark [style*="background:var(--color-navy)"][style*="border-radius:16px"] { background: #0A1628 !important; }
-    /* "Subscribe Free →" pill button (navy bg) */
-    html.dark a[style*="background:var(--color-navy)"][style*="border-radius:9999px"] { background: #1c2433 !important; color: #e6edf3 !important; }
+    /* All navy-background elements: re-lock to dark so remapped --color-navy (#e6edf3) doesn't bleach them */
+    html.dark a[style*="background:var(--color-navy)"]      { background: #1c2433 !important; color: #e6edf3 !important; }
+    html.dark button[style*="background:var(--color-navy)"] { background: #1c2433 !important; color: #e6edf3 !important; }
+    html.dark div[style*="background:var(--color-navy)"]    { background: #1c2433 !important; color: #e6edf3 !important; }
 
     /* Section backgrounds */
     html.dark section[style*="background:#fff"]          { background: #0d1117 !important; }
@@ -246,7 +248,9 @@
     html.dark [style*="color:#777"]         { color: #8b949e !important; }
     html.dark [style*="color:#9ca3af"]      { color: #6e7681 !important; }
     html.dark [style*="color:#3a3a3a"]      { color: #94a3b8 !important; }
-    html.dark [style*="color:rgba(255,255,255,.45)"] { color: rgba(255,255,255,.55) !important; }
+    html.dark [style*="color:rgba(255,255,255,.45)"] { color: rgba(255,255,255,.82) !important; }
+    /* Remove opacity dampening on "Receive summaries for:" label in dark mode */
+    html.dark [style*="opacity:0.6"] { opacity: 1 !important; }
 
     /* Mini stat pills */
     html.dark [style*="background:#fff2ea"] { background: #1f1309 !important; }
